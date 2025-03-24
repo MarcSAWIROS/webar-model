@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebAR Model</title>
     <!-- Load model-viewer.js from a stable source -->
-    <script src="https://cdn.jsdelivr.net/npm/@google/model-viewer@2.6.1/dist/model-viewer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.2.0/dist/model-viewer.js"></script>
 </head>
 <body style="text-align: center;">
 
@@ -14,26 +14,32 @@
     <!-- Proper AR setup -->
     <model-viewer 
         id="model-viewer"
-        src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/scene.gltf"
+        src="https://drive.google.com/uc?id=1YcKbTJoCsrS3ADgU6yuZGuul6WG-mzjB"
         alt="3D Model"
         ar
         ar-modes="webxr scene-viewer quick-look"
         auto-rotate
         camera-controls
-        style="width: 100%; height: 500px;"
-        on-load="onModelLoaded()">
+        style="width: 100%; height: 500px;">
     </model-viewer>
 
     <script>
         // Check if the model is loaded and log it
-        function onModelLoaded() {
-            console.log("Model loaded successfully!");
-        }
+        const modelViewer = document.querySelector('model-viewer');
 
-        // Optionally, you can also listen for errors
-        const modelViewer = document.getElementById('model-viewer');
-        modelViewer.addEventListener('error', function (e) {
+        // Event listener for loading the model
+        modelViewer.addEventListener('load', () => {
+            console.log('Model loaded successfully!');
+        });
+
+        // Listen for errors loading the model
+        modelViewer.addEventListener('error', (e) => {
             console.error('Error loading model:', e);
+        });
+
+        // You can also manually call AR function to make sure it is working
+        modelViewer.addEventListener('ar-status', (event) => {
+            console.log('AR status:', event.detail);
         });
     </script>
 
