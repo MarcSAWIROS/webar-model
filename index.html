@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebAR Model</title>
-    <!-- Load model-viewer.js from a stable source -->
-    <script src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.2.0/dist/model-viewer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@google/model-viewer@2.6.1/dist/model-viewer.min.js"></script>
 </head>
 <body style="text-align: center;">
 
     <h2>Scan to View in AR</h2>
-    
-    <!-- Proper AR setup -->
+
     <model-viewer 
         id="model-viewer"
         src="https://drive.google.com/uc?id=1YcKbTJoCsrS3ADgU6yuZGuul6WG-mzjB"
@@ -24,20 +22,18 @@
     </model-viewer>
 
     <script>
-        // Check if the model is loaded and log it
+        // Listen for the model load event
         const modelViewer = document.querySelector('model-viewer');
-
-        // Event listener for loading the model
         modelViewer.addEventListener('load', () => {
             console.log('Model loaded successfully!');
         });
 
-        // Listen for errors loading the model
+        // Error handling for model loading
         modelViewer.addEventListener('error', (e) => {
             console.error('Error loading model:', e);
         });
 
-        // You can also manually call AR function to make sure it is working
+        // Check if AR is supported and log the status
         modelViewer.addEventListener('ar-status', (event) => {
             console.log('AR status:', event.detail);
         });
