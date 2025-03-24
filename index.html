@@ -3,13 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebAR Model</title>
+    <title>WebAR Model with QR Code</title>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.2.0/dist/model-viewer.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
 </head>
 <body style="text-align: center;">
 
-    <h2>Scan to View in AR</h2>
+    <h2>Scan QR Code to View Model</h2>
 
+    <!-- Webcam display for QR code scanning -->
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <video id="video" width="640" height="480" style="display:none"></video>
+
+    <!-- 3D Model viewer (hidden initially) -->
     <model-viewer 
         id="model-viewer"
         src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/untitled.glb"
@@ -18,19 +24,46 @@
         ar-modes="webxr scene-viewer quick-look"
         auto-rotate
         camera-controls
-        style="width: 100%; height: 500px;">
+        style="width: 100%; height: 500px; display: none;">
     </model-viewer>
 
     <script>
-        // Check if the model is loaded
-        document.getElementById('model-viewer').addEventListener('load', () => {
-            console.log("Model loaded successfully!");
-        });
+        // Access webcam
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const modelViewer = document.getElementById('model-viewer');
+        const ctx = canvas.getContext('2d');
 
-        // Listen for errors
-        document.getElementById('model-viewer').addEventListener('error', (e) => {
-            console.error('Error loading model:', e);
-        });
+        // Start webcam
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+            .then(stream => {
+                video.srcObject = stream;
+                video.play();
+                requestAnimationFrame(scanQRCode);
+            })
+            .catch(err => {
+                console.error('Error accessing webcam:', err);
+            });
+
+        // Scan for QR code
+        function scanQRCode() {
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, canvas.width, canvas.height);
+
+            if (code) {
+                // QR Code detected, check for specific data
+                console.log('QR Code detected:', code.data);
+
+                // Trigger action if the QR code matches the specific data (show_model_1234)
+                if (code.data === 'show_model_1234') {
+                    console.log("Matching QR code detected!");
+                    modelViewer.style.display = 'block';  // Show the model viewer
+                }
+            }
+
+            requestAnimationFrame(scanQRCode);  // Continue scanning
+        }
     </script>
 
 </body>
