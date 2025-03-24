@@ -9,8 +9,8 @@
 </head>
 <body style="margin: 0; overflow: hidden;">
 
-    <a-scene embedded arjs>
-        <!-- Use your pattern file for the marker -->
+    <a-scene embedded arjs="sourceType: webcam;">
+        <!-- Marker is now properly activated -->
         <a-marker type="pattern" url="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/pattern-eyeTest.patt">
             <!-- Model to be shown when QR is detected -->
             <a-entity 
@@ -20,6 +20,7 @@
             </a-entity>
         </a-marker>
 
+        <!-- Camera entity -->
         <a-entity camera></a-entity>
     </a-scene>
 
