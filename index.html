@@ -1,7 +1,24 @@
-<model-viewer 
-    src="https://raw.githubusercontent.com/google/model-viewer/master/packages/model-viewer/test/models/animated-cube.glb"
-    alt="3D Model"
-    auto-rotate
-    camera-controls
-    style="width: 100%; height: 500px;">
-</model-viewer>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAR Model</title>
+    <script src="https://cdn.jsdelivr.net/npm/@google/model-viewer@latest/dist/model-viewer.min.js"></script>
+</head>
+<body style="text-align: center;">
+
+    <h2>Test Model Viewer with a Trusted Model</h2>
+    
+    <model-viewer 
+        src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+        alt="3D Model"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        auto-rotate
+        camera-controls
+        style="width: 100%; height: 500px;">
+    </model-viewer>
+
+</body>
+</html>
