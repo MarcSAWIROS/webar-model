@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebAR Model</title>
-    <!-- Load the correct version of model-viewer -->
+    <!-- Load model-viewer.js from a stable source -->
     <script src="https://cdn.jsdelivr.net/npm/@google/model-viewer@2.6.1/dist/model-viewer.js"></script>
 </head>
 <body style="text-align: center;">
 
     <h2>Scan to View in AR</h2>
     
-    <!-- Proper model-viewer configuration for AR -->
-    <model-viewer src="https://drive.google.com/uc?id=1YcKbTJoCsrS3ADgU6yuZGuul6WG-mzjB"
+    <!-- Proper AR setup -->
+    <model-viewer src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/scene.gltf"
                   alt="3D Model"
                   ar
                   ar-modes="webxr scene-viewer quick-look"
