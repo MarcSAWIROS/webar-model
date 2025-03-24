@@ -83,7 +83,7 @@
     <!-- AR Model Viewer -->
     <model-viewer 
         id="model-viewer"
-        src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/untitled.glb"
+        src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/church_cross.glb"
         alt="3D Model"
         ar
         ar-modes="webxr scene-viewer quick-look"
@@ -110,9 +110,7 @@
                 screenshotImage.src = screenshotData;
 
                 // Display the screenshot in the overlay
-                const overlay = document.getElementById('screenshot-overlay');
-                overlay.style.display = 'block';
-                overlay.innerHTML = 'Screenshot Taken!';
+               
                 
                 // You can add logic to show the image if needed
                 // overlay.appendChild(screenshotImage);
