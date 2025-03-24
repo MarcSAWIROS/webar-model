@@ -12,7 +12,6 @@
             margin: 0;
             padding: 0;
             transition: background-color 0.5s ease-in-out; /* Smooth background transition */
-            text-align: center;
         }
 
         h2 {
@@ -37,24 +36,43 @@
             }
         }
 
-        .capture-btn {
+        /* Screenshot Button Style */
+        #screenshot-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            font-size: 18px;
             background-color: #4CAF50;
             color: white;
-            padding: 15px 32px;
-            font-size: 20px;
-            cursor: pointer;
             border: none;
-            border-radius: 10px;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 100;
         }
 
-        .capture-btn:hover {
+        #screenshot-btn:hover {
             background-color: #45a049;
+            transform: scale(1.1);
         }
 
-        .capture-btn:active {
-            transform: scale(0.95); /* Button click effect */
+        #screenshot-btn:active {
+            transform: scale(0.95); /* Button press effect */
+        }
+
+        /* Screenshot Overlay */
+        #screenshot-overlay {
+            position: fixed;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none; /* Hidden by default */
+            z-index: 100;
         }
     </style>
 </head>
@@ -62,6 +80,7 @@
 
     <h2>Scan to View in AR</h2>
 
+    <!-- AR Model Viewer -->
     <model-viewer 
         id="model-viewer"
         src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/untitled.glb"
@@ -73,32 +92,39 @@
         style="width: 100%; height: 500px;">
     </model-viewer>
 
-    <button class="capture-btn" onclick="captureImage()">Capture Screenshot</button>
+    <!-- Screenshot Button -->
+    <button id="screenshot-btn">Take Screenshot</button>
+
+    <!-- Screenshot Overlay (preview the captured screenshot) -->
+    <div id="screenshot-overlay">Screenshot Taken!</div>
 
     <script>
-        // Check if the model is loaded
-        document.getElementById('model-viewer').addEventListener('load', () => {
-            console.log("Model loaded successfully!");
-        });
-
-        // Listen for errors
-        document.getElementById('model-viewer').addEventListener('error', (e) => {
-            console.error('Error loading model:', e);
-        });
-
-        // Capture the image from model-viewer
-        function captureImage() {
+        // Capture screenshot and display it in an overlay
+        document.getElementById('screenshot-btn').addEventListener('click', () => {
             const modelViewer = document.getElementById('model-viewer');
-            const image = modelViewer.getScreenshot(); // Capture the current model view
-            if (image) {
-                const link = document.createElement('a');
-                link.href = image;
-                link.download = 'AR_model_screenshot.png';
-                link.click();
-            } else {
-                alert("Unable to capture the screenshot.");
-            }
-        }
+
+            // Capture the screenshot
+            modelViewer.toDataURL().then((screenshotData) => {
+                // Create an image from the screenshot data
+                const screenshotImage = new Image();
+                screenshotImage.src = screenshotData;
+
+                // Display the screenshot in the overlay
+                const overlay = document.getElementById('screenshot-overlay');
+                overlay.style.display = 'block';
+                overlay.innerHTML = 'Screenshot Taken!';
+                
+                // You can add logic to show the image if needed
+                // overlay.appendChild(screenshotImage);
+
+                // Hide overlay after 3 seconds
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 3000);
+            }).catch((error) => {
+                console.error('Error capturing screenshot:', error);
+            });
+        });
     </script>
 
 </body>
