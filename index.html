@@ -5,12 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AR Viewer</title>
   <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.2.0/dist/model-viewer.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f0f0f0;
+      font-family: 'Fredoka One', cursive;
+      background: linear-gradient(to bottom, #000000, #003366);
       text-align: center;
+      color: white;
+      overflow: hidden;
     }
 
     .scene {
@@ -19,6 +23,7 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
+      animation: fadeIn 1s ease-in-out;
     }
 
     .scene.active {
@@ -28,18 +33,18 @@
     button {
       padding: 15px 30px;
       margin: 10px;
-      font-size: 18px;
+      font-size: 20px;
       border: none;
-      border-radius: 10px;
-      background-color: #007bff;
+      border-radius: 15px;
+      background-color: #00aaff;
       color: white;
       cursor: pointer;
-      transition: background-color 0.3s;
-      z-index: 10;
+      transition: transform 0.3s, background-color 0.3s;
     }
 
     button:hover {
-      background-color: #0056b3;
+      background-color: #0077cc;
+      transform: scale(1.1);
     }
 
     .back-button {
@@ -58,30 +63,51 @@
       top: 20px;
       left: 50%;
       transform: translateX(-50%);
-      max-width: 200px; /* Adjust this based on your logo size */
+      max-width: 120px;
+      border-radius: 50%;
+      box-shadow: 0 0 15px #00aaff;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    h1, h2 {
+      margin: 10px 0;
+      text-shadow: 2px 2px 4px #000;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-10px); }
     }
   </style>
 </head>
 <body>
 
+  <!-- Logo -->
+  <img class="logo" src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/channels4_profile.jpg" alt="Logo">
+
   <!-- Welcome Scene -->
- <div id="welcomeScene" class="scene active">
+  <div id="welcomeScene" class="scene active">
     <h1>كنيسة الملاك ميخائيل</h1>
-    <h1>مدارس الأحد (إبتدائي)</h1>
-      <h1>عيد القيامة المجيد </h1>
-    <button onclick="goToScene('modelSelector')">Start</button>
+    <h2>مدارس الأحد (إبتدائي)</h2>
+    <h1>🎉 عيد القيامة المجيد 🎉</h1>
+    <button onclick="playSound(); goToScene('modelSelector')">ابدأ</button>
   </div>
 
   <!-- Model Selection Scene -->
   <div id="modelSelector" class="scene">
-    <h2>Select a Model</h2>
-    <button onclick="loadModel('church_cross')">Church Cross</button>
-    <button onclick="loadModel('Astronaut')">Astronaut</button>
+    <h2>اختر النموذج</h2>
+    <button onclick="playSound(); loadModel('church_cross')">Church Cross</button>
+    <button onclick="playSound(); loadModel('Astronaut')">Astronaut</button>
   </div>
 
   <!-- AR Viewer Scene -->
   <div id="arScene" class="scene">
-    <button class="back-button" onclick="goBack()">← Back</button>
+    <button class="back-button" onclick="playSound(); goBack()">← رجوع</button>
     <model-viewer
       id="modelViewer"
       alt="3D Model"
@@ -91,6 +117,9 @@
       camera-controls>
     </model-viewer>
   </div>
+
+  <!-- Sound Effect -->
+  <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_599fdb0c43.mp3" preload="auto"></audio>
 
   <script>
     function goToScene(sceneId) {
@@ -103,10 +132,7 @@
       const baseURL = 'https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/';
       const modelFile = modelName === 'church_cross' ? 'church_cross.glb' : 'Astronaut.glb';
       viewer.setAttribute('src', baseURL + modelFile);
-
       goToScene('arScene');
-
-      // Auto-launch AR mode after a short delay
       setTimeout(() => {
         viewer.activateAR();
       }, 1200);
@@ -114,12 +140,15 @@
 
     function goBack() {
       const viewer = document.getElementById('modelViewer');
-
-      // Stop AR session if active (some browsers handle this automatically)
-      viewer.pause();  // Optional: stops model animations
-      viewer.removeAttribute('src');  // Optional: clean up
-
+      viewer.pause();
+      viewer.removeAttribute('src');
       goToScene('modelSelector');
+    }
+
+    function playSound() {
+      const sound = document.getElementById('clickSound');
+      sound.currentTime = 0;
+      sound.play();
     }
   </script>
 
