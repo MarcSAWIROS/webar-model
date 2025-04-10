@@ -9,10 +9,9 @@
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(to top, #1e3c72, #2a5298); /* Sky blue gradient */
+      background: linear-gradient(to bottom, #ff6f61, #ffcc5c);
       color: white;
       text-align: center;
-      overflow: hidden;
     }
 
     .scene {
@@ -29,15 +28,15 @@
       display: flex;
     }
 
-    /* Updated button styles */
+    /* Fun Button Styling */
     button {
       padding: 20px 40px;
       margin: 15px;
       font-size: 22px;
       border: none;
-      border-radius: 25px; /* Rounded button edges */
-      background-color: #4285F4; /* Blue color */
-      color: white;
+      border-radius: 15px;
+      background-color: #ffbb33;
+      color: black;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.3s ease-in-out, box-shadow 0.3s;
       z-index: 10;
@@ -46,18 +45,33 @@
     }
 
     button:hover {
-      background-color: #356ac3; /* Darker blue */
+      background-color: #ff7043;
       transform: scale(1.1);
-      box-shadow: 0 0 15px rgba(66, 133, 244, 0.8); /* Blue glow */
+      box-shadow: 0 0 15px rgba(255, 165, 0, 0.8);
     }
 
     button:active {
       transform: scale(0.95);
     }
 
+    /* Input Field Styling */
+    input[type="text"] {
+      padding: 10px 20px;
+      font-size: 20px;
+      margin: 15px;
+      border-radius: 15px;
+      border: 2px solid #ffbb33;
+      background-color: white;
+      color: black;
+      text-align: center;
+      width: 80%;
+      max-width: 350px;
+    }
+
+    /* Back Button */
     .back-button {
       position: absolute;
-      bottom: 20px; /* Moved down */
+      top: 20px;
       left: 20px;
       font-size: 24px;
       background-color: transparent;
@@ -68,6 +82,7 @@
       border-radius: 10px;
     }
 
+    /* Logo */
     .logo {
       position: absolute;
       top: 10px;
@@ -79,6 +94,7 @@
       z-index: 5;
     }
 
+    /* Resurrection Image */
     .resurrection-image {
       max-width: 300px;
       border-radius: 20px;
@@ -99,25 +115,6 @@
 
     h1, h2, h3 {
       margin: 10px 0;
-    }
-
-    /* Fun Input Field Styling */
-    input {
-      padding: 15px;
-      font-size: 18px;
-      border: 2px solid #4285F4;
-      border-radius: 10px;
-      background-color: #fff;
-      margin: 20px;
-      width: 250px;
-      text-align: center;
-    }
-
-    .gift-container {
-      display: flex;
-      gap: 30px;
-      flex-wrap: wrap;
-      justify-content: center;
     }
 
     /* Fun Gift Box Styling */
@@ -142,42 +139,11 @@
       opacity: 0.7;
     }
 
-    /* Confetti Animation */
-    .confetti {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0;
-      animation: confettiFall 3s ease-out forwards;
-    }
-
-    @keyframes confettiFall {
-      0% {
-        opacity: 0;
-        transform: translateY(-100%);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(100vh);
-      }
-    }
-
-    /* Animated Font */
-    .dancing-text {
-      display: inline-block;
-      animation: dance 1.5s infinite;
-    }
-
-    @keyframes dance {
-      0% { transform: rotate(0deg); }
-      25% { transform: rotate(5deg); }
-      50% { transform: rotate(-5deg); }
-      75% { transform: rotate(3deg); }
-      100% { transform: rotate(0deg); }
+    .gift-container {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
   </style>
 </head>
@@ -188,33 +154,22 @@
 
   <!-- Welcome Scene -->
   <div id="welcomeScene" class="scene active">
+    <img class="resurrection-image" src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/images.jpg" />
     <h1>كنيسة الملاك ميخائيل</h1>
     <h2>مدارس الأحد (إبتدائي)</h2>
     <h1>عيد القيامة المجيد</h1>
-    <input type="text" id="nameField" placeholder="أدخل اسمك هنا" />
-    <button onclick="goToScene('nameInput')">Start</button>
-  </div>
-
-  <!-- Name Input Scene -->
-  <div id="nameInput" class="scene">
-    <button onclick="submitName()">تأكيد</button>
-  </div>
-
-  <!-- Personalized Message Scene -->
-  <div id="personalizedMessage" class="scene">
-    <h2>المسيح قام يا <span id="personalName" class="dancing-text"></span></h2>
-    <div class="confetti"></div> <!-- Confetti container -->
-    <button onclick="goToScene('modelSelector')">التالي</button>
+    <label for="nameInput" style="font-size: 20px;">Enter your name:</label>
+    <input type="text" id="nameInput" placeholder="Your Name" />
+    <button onclick="startExperience()">Start</button>
   </div>
 
   <!-- Model Selection Scene -->
   <div id="modelSelector" class="scene">
-    <h2>اختر هديتك</h2>
-    <h2>مرحباً يا <span id="personalNameSelector"></span></h2> <!-- Added name -->
+    <h2>المسيح قام يا <span id="kidName"></span></h2>
     <div class="gift-container">
-      <div class="gift-box" onclick="openGift(this, 'church_cross')">Model 1</div>
-      <div class="gift-box" onclick="openGift(this, 'tomb')">Model 2</div>
-      <div class="gift-box" onclick="openGift(this, 'crown')">Model 3</div>
+      <div class="gift-box" onclick="openGift(this, 'church_cross')"></div>
+      <div class="gift-box" onclick="openGift(this, 'tomb')"></div>
+      <div class="gift-box" onclick="openGift(this, 'crown')"></div>
     </div>
   </div>
 
@@ -232,27 +187,30 @@
   </div>
 
   <script>
+    let kidName = '';
+
+    function startExperience() {
+      kidName = document.getElementById('nameInput').value.trim();
+      if (kidName) {
+        // Show the model selection scene and set the personalized message
+        document.getElementById('kidName').textContent = kidName;
+        goToScene('modelSelector');
+      } else {
+        alert("Please enter your name!");
+      }
+    }
+
     function goToScene(sceneId) {
       document.querySelectorAll('.scene').forEach(el => el.classList.remove('active'));
       document.getElementById(sceneId).classList.add('active');
     }
 
-    function submitName() {
-      const name = document.getElementById('nameField').value;
-      if (name.trim() !== '') {
-        document.getElementById('personalName').innerText = name;
-        document.getElementById('personalNameSelector').innerText = name;
-        goToScene('personalizedMessage');
-      } else {
-        alert('Please enter your name');
-      }
-    }
-
     function openGift(element, modelName) {
       element.classList.add('opening');
+
       setTimeout(() => {
         loadModel(modelName);
-      }, 600);
+      }, 600); // Wait for box "open" animation
     }
 
     function loadModel(modelName) {
@@ -284,8 +242,10 @@
 
     function goBack() {
       const viewer = document.getElementById('modelViewer');
+
       viewer.pause();
       viewer.removeAttribute('src');
+
       goToScene('modelSelector');
     }
   </script>
