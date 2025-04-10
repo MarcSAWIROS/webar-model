@@ -49,7 +49,7 @@
       max-width: 300px;
       border-radius: 20px;
       margin-top: 80px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
       animation: glow 3s ease-in-out infinite;
     }
@@ -67,14 +67,14 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 30px;
+      gap: 20px;
       margin-top: 40px;
     }
 
     .gift-box {
       width: 120px;
       height: 120px;
-      background: url('https://cdn-icons-png.flaticon.com/512/3309/3309752.png') center/contain no-repeat;
+      background: url('https://cdn-icons-png.flaticon.com/512/3468/3468372.png') center/contain no-repeat;
       position: relative;
       cursor: pointer;
       transition: transform 0.3s ease;
@@ -168,6 +168,10 @@
       color: white;
       text-shadow: 1px 1px 4px #000;
     }
+
+    #welcomeScene h1, #welcomeScene h2 {
+      margin: 5px 0;
+    }
   </style>
 </head>
 <body>
@@ -186,16 +190,16 @@
 
   <!-- Model Selection Scene -->
   <div id="modelSelector" class="scene">
-    <h2>Choose your model</h2>
+    <h2>اختر النموذج</h2>
     <div class="gift-buttons">
       <div class="gift-box" onclick="openGift(this, 'church_cross')">
-        <div class="gift-label">✝️ الصليب</div>
+        <div class="gift-label">الصليب</div>
       </div>
       <div class="gift-box" onclick="openGift(this, 'tomb')">
-        <div class="gift-label">⚰️ القبر</div>
+        <div class="gift-label">القبر</div>
       </div>
       <div class="gift-box" onclick="openGift(this, 'crown')">
-        <div class="gift-label">👑 التاج</div>
+        <div class="gift-label">التاج</div>
       </div>
     </div>
   </div>
@@ -270,7 +274,6 @@
         confetti.appendChild(particle);
       }
 
-      // Clear confetti after 2.5s
       setTimeout(() => confetti.innerHTML = '', 2500);
     }
   </script>
