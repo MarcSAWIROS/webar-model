@@ -9,7 +9,7 @@
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(to top, #003366, #1a237e); /* Sky blue gradient */
+      background: linear-gradient(to top, #1e3c72, #2a5298); /* Sky background */
       color: white;
       text-align: center;
       overflow: hidden;
@@ -30,34 +30,33 @@
     }
 
     button {
-      padding: 20px 50px;
+      padding: 20px 40px;
       margin: 15px;
-      font-size: 24px;
+      font-size: 22px;
       border: none;
-      border-radius: 50px; /* Rounded button */
-      background: linear-gradient(45deg, #ff6f61, #ffcc5c); /* Gradient color */
+      border-radius: 30px;
+      background-color: #4CAF50; /* Greenish blue */
       color: white;
       cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+      transition: background-color 0.3s, transform 0.3s ease-in-out, box-shadow 0.3s;
+      z-index: 10;
       font-weight: bold;
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4); /* Text shadow for better visibility */
-      box-shadow: 0px 4px 10px rgba(255, 100, 50, 0.8); /* Subtle shadow */
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
     }
 
     button:hover {
-      background: linear-gradient(45deg, #ff7043, #ffbb33); /* Slightly darker on hover */
+      background-color: #45a049;
       transform: scale(1.1);
-      box-shadow: 0 0 15px rgba(255, 165, 0, 0.8); /* Glowing effect */
+      box-shadow: 0 0 25px rgba(72, 235, 255, 0.8); /* Light blue glow */
     }
 
     button:active {
       transform: scale(0.95);
-      box-shadow: none;
     }
 
     .back-button {
       position: absolute;
-      top: 20px;
+      bottom: 20px; /* Moved to the bottom */
       left: 20px;
       font-size: 24px;
       background-color: transparent;
@@ -101,10 +100,11 @@
       margin: 10px 0;
     }
 
+    /* Fun Input Field Styling */
     input {
       padding: 15px;
       font-size: 18px;
-      border: 2px solid #ffbb33;
+      border: 2px solid #4CAF50;
       border-radius: 10px;
       background-color: #fff;
       margin: 20px;
@@ -119,6 +119,7 @@
       justify-content: center;
     }
 
+    /* Fun Gift Box Styling */
     .gift-box {
       width: 120px;
       height: 120px;
@@ -139,10 +140,49 @@
       transform: scale(1);
       opacity: 0.7;
     }
+
+    /* Confetti Animation */
+    .confetti {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1000;
+      animation: confetti 5s infinite;
+    }
+
+    @keyframes confetti {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+      }
+    }
+
+    /* Dancing font effect for the message */
+    .dancing-text {
+      display: inline-block;
+      animation: dance 1.5s infinite ease-in-out;
+    }
+
+    @keyframes dance {
+      0% {
+        transform: rotate(-5deg);
+      }
+      50% {
+        transform: rotate(5deg);
+      }
+      100% {
+        transform: rotate(-5deg);
+      }
+    }
+
   </style>
 </head>
 <body>
 
+  <!-- Logo -->
   <img class="logo" src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/channels4_profile.jpg" alt="Logo" />
 
   <!-- Welcome Scene -->
@@ -151,7 +191,8 @@
     <h1>كنيسة الملاك ميخائيل</h1>
     <h2>مدارس الأحد (إبتدائي)</h2>
     <h1>عيد القيامة المجيد</h1>
-    <button onclick="goToScene('nameInput')">Start</button>
+    <input type="text" id="nameField" placeholder="أدخل اسمك هنا" />
+    <button onclick="submitName()">Start</button>
   </div>
 
   <!-- Name Input Scene -->
@@ -163,7 +204,8 @@
 
   <!-- Personalized Message Scene -->
   <div id="personalizedMessage" class="scene">
-    <h2>المسيح قام يا <span id="personalName"></span></h2>
+    <h2>المسيح قام يا <span id="personalName" class="dancing-text"></span></h2>
+    <div class="confetti"></div>
     <button onclick="goToScene('modelSelector')">التالي</button>
   </div>
 
@@ -171,9 +213,9 @@
   <div id="modelSelector" class="scene">
     <h2>Choose your gift</h2>
     <div class="gift-container">
-      <div class="gift-box" onclick="openGift(this, 'church_cross')"></div>
-      <div class="gift-box" onclick="openGift(this, 'tomb')"></div>
-      <div class="gift-box" onclick="openGift(this, 'crown')"></div>
+      <div class="gift-box" onclick="openGift(this, 'church_cross')">Model 1</div>
+      <div class="gift-box" onclick="openGift(this, 'tomb')">Model 2</div>
+      <div class="gift-box" onclick="openGift(this, 'crown')">Model 3</div>
     </div>
   </div>
 
@@ -202,12 +244,13 @@
         document.getElementById('personalName').innerText = name;
         goToScene('personalizedMessage');
       } else {
-        alert('Name');
+        alert('Please enter your name.');
       }
     }
 
     function openGift(element, modelName) {
       element.classList.add('opening');
+
       setTimeout(() => {
         loadModel(modelName);
       }, 600); // Wait for box "open" animation
@@ -242,8 +285,10 @@
 
     function goBack() {
       const viewer = document.getElementById('modelViewer');
+
       viewer.pause();
       viewer.removeAttribute('src');
+
       goToScene('modelSelector');
     }
   </script>
