@@ -1,132 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WebAR Experience</title>
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.2.0/dist/model-viewer.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Arial', sans-serif;
-      background-color: #f0f0f0;
+      padding: 0;
+      background: linear-gradient(120deg, #1e3c72, #2a5298);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      color: white;
       text-align: center;
     }
 
-    .scene {
-      display: none;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-      padding: 20px;
-    }
-
-    #welcome {
-      display: flex;
-      background: linear-gradient(135deg, #4facfe, #00f2fe);
-      color: white;
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    #menu {
-      background-color: #fff;
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    h1, h2 {
-      margin-bottom: 20px;
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 40px;
     }
 
     button {
-      padding: 15px 25px;
-      font-size: 18px;
-      margin: 10px;
+      font-size: 1.5em;
+      padding: 15px 30px;
+      background-color: #00c9a7;
       border: none;
       border-radius: 10px;
-      cursor: pointer;
-      background: #4CAF50;
       color: white;
-      transition: transform 0.2s ease, background 0.3s ease;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background: #45a049;
-      transform: scale(1.05);
-    }
-
-    model-viewer {
-      display: none;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
+      background-color: #008d78;
     }
   </style>
 </head>
 <body>
 
-  <!-- Welcome Scene -->
-  <div id="welcome" class="scene">
-    <h1>👋 Welcome to WebAR Experience</h1>
-    <button onclick="goToMenu()">Start</button>
-  </div>
-
-  <!-- Menu Scene -->
-  <div id="menu" class="scene">
-    <h2>Pick a 3D Model</h2>
-    <button onclick="launchAR('church_cross.glb')">⛪ Church Cross</button>
-    <button onclick="launchAR('Astronaut.glb')">👨‍🚀 Astronaut</button>
-    <button onclick="launchAR('model3.glb')">✨ Model 3</button>
-    <button onclick="launchAR('model4.glb')">🌟 Model 4</button>
-  </div>
-
-  <!-- Hidden Model Viewer -->
-  <model-viewer 
-    id="model-viewer"
-    ar
-    ar-modes="webxr scene-viewer quick-look"
-    auto-rotate
-    camera-controls
-    style="width: 100%; height: 500px;">
-  </model-viewer>
-
-  <script>
-    const baseURL = "https://marcsawiros.github.io/webar-model/";
-    const welcome = document.getElementById('welcome');
-    const menu = document.getElementById('menu');
-    const modelViewer = document.getElementById('model-viewer');
-
-    // Show menu scene
-    function goToMenu() {
-      welcome.style.display = "none";
-      menu.style.display = "flex";
-    }
-
-    // Launch specific model in AR
-    function launchAR(fileName) {
-      const modelURL = baseURL + fileName;
-      modelViewer.setAttribute("src", modelURL);
-
-      // Show model-viewer temporarily so the model can load
-      modelViewer.style.display = "block";
-
-      // Add 'load' listener to ensure model is fully ready before AR
-      modelViewer.addEventListener('load', () => {
-        if (modelViewer.canActivateAR) {
-          modelViewer.activateAR();
-        } else {
-          console.warn("AR not available on this device or browser.");
-        }
-
-        // Hide again after trigger
-        setTimeout(() => {
-          modelViewer.style.display = "none";
-        }, 2000);
-      }, { once: true });
-    }
-  </script>
+  <h1>Welcome to My AR Gallery</h1>
+  <button onclick="location.href='model-selection.html'">Start</button>
 
 </body>
 </html>
