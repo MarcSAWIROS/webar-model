@@ -28,7 +28,6 @@
       display: flex;
     }
 
-    /* Fun Button Styling */
     button {
       padding: 20px 40px;
       margin: 15px;
@@ -54,7 +53,6 @@
       transform: scale(0.95);
     }
 
-    /* Back Button */
     .back-button {
       position: absolute;
       top: 20px;
@@ -68,7 +66,6 @@
       border-radius: 10px;
     }
 
-    /* Logo */
     .logo {
       position: absolute;
       top: 10px;
@@ -80,7 +77,6 @@
       z-index: 5;
     }
 
-    /* Resurrection Image */
     .resurrection-image {
       max-width: 300px;
       border-radius: 20px;
@@ -101,6 +97,25 @@
 
     h1, h2, h3 {
       margin: 10px 0;
+    }
+
+    /* Fun Input Field Styling */
+    input {
+      padding: 15px;
+      font-size: 18px;
+      border: 2px solid #ffbb33;
+      border-radius: 10px;
+      background-color: #fff;
+      margin: 20px;
+      width: 250px;
+      text-align: center;
+    }
+
+    .gift-container {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     /* Fun Gift Box Styling */
@@ -124,13 +139,6 @@
       transform: scale(1);
       opacity: 0.7;
     }
-
-    .gift-container {
-      display: flex;
-      gap: 30px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
   </style>
 </head>
 <body>
@@ -144,7 +152,20 @@
     <h1>كنيسة الملاك ميخائيل</h1>
     <h2>مدارس الأحد (إبتدائي)</h2>
     <h1>عيد القيامة المجيد</h1>
-    <button onclick="playSound(); goToScene('modelSelector')">Start</button>
+    <button onclick="goToScene('nameInput')">Start</button>
+  </div>
+
+  <!-- Name Input Scene -->
+  <div id="nameInput" class="scene">
+    <h2>أدخل اسمك</h2>
+    <input type="text" id="nameField" placeholder="أدخل اسمك هنا" />
+    <button onclick="submitName()">تأكيد</button>
+  </div>
+
+  <!-- Personalized Message Scene -->
+  <div id="personalizedMessage" class="scene">
+    <h2>المسيح قام يا <span id="personalName"></span></h2>
+    <button onclick="goToScene('modelSelector')">التالي</button>
   </div>
 
   <!-- Model Selection Scene -->
@@ -174,6 +195,16 @@
     function goToScene(sceneId) {
       document.querySelectorAll('.scene').forEach(el => el.classList.remove('active'));
       document.getElementById(sceneId).classList.add('active');
+    }
+
+    function submitName() {
+      const name = document.getElementById('nameField').value;
+      if (name.trim() !== '') {
+        document.getElementById('personalName').innerText = name;
+        goToScene('personalizedMessage');
+      } else {
+        alert('يرجى إدخال اسمك');
+      }
     }
 
     function openGift(element, modelName) {
@@ -218,12 +249,6 @@
       viewer.removeAttribute('src');
 
       goToScene('modelSelector');
-    }
-
-    function playSound() {
-      // Optional sound effect on "Start"
-      const sound = new Audio('https://www.soundjay.com/button/beep-07.wav');
-      sound.play();
     }
   </script>
 
