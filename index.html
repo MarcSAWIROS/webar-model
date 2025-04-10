@@ -42,6 +42,7 @@
       z-index: 10;
       font-weight: bold;
       text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      text-align: center; /* Center text inside the button */
     }
 
     button:hover {
@@ -71,8 +72,8 @@
     /* Back Button */
     .back-button {
       position: absolute;
-      top: 20px;
-      right: 20px; /* Changed from left to right */
+      top: 60px;  /* Moved down a bit */
+      left: 20px; /* Top-left corner */
       font-size: 24px;
       background-color: transparent;
       color: white;
@@ -80,6 +81,7 @@
       border: 2px solid white;
       padding: 10px;
       border-radius: 10px;
+      z-index: 10;
     }
 
     /* Logo */
@@ -127,6 +129,12 @@
       border-radius: 15px;
       background-color: #007bff; /* Blue color for the gift box */
       box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white; /* Text color inside button */
+      font-size: 18px;
+      font-weight: bold;
     }
 
     .gift-box:hover {
@@ -166,9 +174,9 @@
   <div id="modelSelector" class="scene">
     <h2>المسيح قام يا <span id="kidName"></span></h2>
     <div class="gift-container">
-      <div class="gift-box" onclick="openGift(this, 'church_cross')"></div>
-      <div class="gift-box" onclick="openGift(this, 'tomb')"></div>
-      <div class="gift-box" onclick="openGift(this, 'crown')"></div>
+      <div class="gift-box" onclick="openGift(this, 'church_cross')">صليب الكنيسة</div>
+      <div class="gift-box" onclick="openGift(this, 'tomb')">القبر</div>
+      <div class="gift-box" onclick="openGift(this, 'crown')">التاج</div>
     </div>
   </div>
 
