@@ -100,7 +100,7 @@
   <div id="welcomeScene" class="scene active">
     <img class="resurrection-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Resurrection_of_Christ_by_Carl_Heinrich_Bloch.jpg/640px-Resurrection_of_Christ_by_Carl_Heinrich_Bloch.jpg" alt="Jesus Resurrection" />
     <h1>كنيسة الملاك ميخائيل</h1>
-    <h1>مدارس الأحد (إبتدائي)</h1>
+    <h2>مدارس الأحد (إبتدائي)</h2>
     <h1>عيد القيامة المجيد</h1>
     <button onclick="playSound(); goToScene('modelSelector')">Start</button>
   </div>
@@ -134,7 +134,7 @@
     function loadModel(modelName) {
       const viewer = document.getElementById('modelViewer');
       const baseURL = 'https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/';
-      const modelFile = modelName === 'church_cross' ? 'church_cross.glb' : 'Astronaut.glb';
+      const modelFile = modelName === 'church_cross' ? 'church_cross.glb' : 'tomb.glb';
       viewer.setAttribute('src', baseURL + modelFile);
 
       goToScene('arScene');
@@ -142,7 +142,7 @@
       // Auto-launch AR mode after a short delay
       setTimeout(() => {
         viewer.activateAR();
-      }, 1200);
+      }, 300);
     }
 
     function goBack() {
