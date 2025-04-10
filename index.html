@@ -3,120 +3,124 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WebAR Gallery</title>
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.2.0"></script>
+  <title>WebAR Model Selector</title>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.2.0/dist/model-viewer.min.js"></script>
   <style>
     body {
       margin: 0;
-      font-family: 'Arial', sans-serif;
-      background-color: #f0f0f0;
-      overflow: hidden;
-    }
-
-    .scene {
-      display: none;
+      font-family: sans-serif;
+      background: #111;
+      color: white;
+      display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
       height: 100vh;
-      text-align: center;
+      overflow: hidden;
+    }
+    #welcome, #menu, #viewer {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 1s ease;
+      width: 100%;
+      height: 100%;
       padding: 20px;
-      animation: fadeIn 0.6s ease;
+      box-sizing: border-box;
     }
-
-    .active {
+    #welcome {
       display: flex;
+      background: radial-gradient(#333, #111);
     }
-
-    h1, h2 {
-      margin-bottom: 20px;
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
     }
-
     button {
-      padding: 15px 25px;
-      margin: 10px;
-      font-size: 18px;
+      padding: 12px 24px;
+      font-size: 1.1rem;
       border: none;
-      border-radius: 8px;
-      background-color: #4CAF50;
+      background: #00bcd4;
       color: white;
+      border-radius: 8px;
       cursor: pointer;
-      transition: 0.3s ease;
+      margin: 10px;
     }
-
     button:hover {
-      background-color: #388E3C;
-      transform: scale(1.05);
+      background: #0097a7;
     }
-
+    #model-buttons button {
+      width: 80%;
+    }
+    #viewer {
+      background: #000;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
     model-viewer {
       width: 100%;
-      height: 100vh;
-    }
-
-    #back-btn {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 10;
-      padding: 10px 15px;
-      font-size: 16px;
-      background-color: #333;
-      color: white;
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
+      height: 100%;
+      background: #000;
     }
   </style>
 </head>
 <body>
 
-  <!-- Scene 1: Welcome -->
-  <div id="scene1" class="scene active">
-    <h1>Welcome to AR World!</h1>
-    <button onclick="goToScene(2)">Start</button>
+  <!-- Welcome Screen -->
+  <div id="welcome">
+    <h1>Welcome to WebAR Experience</h1>
+    <button onclick="goToMenu()">Start</button>
   </div>
 
-  <!-- Scene 2: Menu -->
-  <div id="scene2" class="scene">
-    <h2>Choose a Model</h2>
-    <button onclick="openModel('Astronaut.glb')">🚗 View Astronaut</button>
-    <button onclick="openModel('church_cross.glb')">🏠 View church_cross</button>
-    <button onclick="openModel('chair.glb')">🪑 View Chair</button>
-    <button onclick="openModel('robot.glb')">🤖 View Robot</button>
+  <!-- Model Selection Menu -->
+  <div id="menu">
+    <h1>Select a Model</h1>
+    <div id="model-buttons">
+      <button onclick="loadModel('church_cross.glb')">Church Cross</button>
+      <button onclick="loadModel('Astronaut.glb')">Astronaut</button>
+      <!-- Add more buttons here if needed -->
+    </div>
   </div>
 
-  <!-- Scene 3: AR Viewer -->
-  <div id="scene3" class="scene">
-    <button id="back-btn" onclick="goToScene(2)">← Back</button>
+  <!-- Model Viewer -->
+  <div id="viewer">
     <model-viewer
-      id="viewer"
-      src=""
-      alt="3D model"
+      id="model-viewer"
+      alt="3D Model"
       ar
       ar-modes="webxr scene-viewer quick-look"
       auto-rotate
       camera-controls
-      ios-src="">
+      shadow-intensity="1"
+      exposure="1">
     </model-viewer>
+    <button onclick="goBack()" style="position: absolute; top: 10px; left: 10px;">Back</button>
   </div>
 
   <script>
-    function goToScene(sceneNumber) {
-      document.querySelectorAll('.scene').forEach(scene => {
-        scene.classList.remove('active');
-      });
-      document.getElementById(`scene${sceneNumber}`).classList.add('active');
+    const baseURL = "https://marcsawiros.github.io/webar-model/";
+    const welcome = document.getElementById('welcome');
+    const menu = document.getElementById('menu');
+    const viewer = document.getElementById('viewer');
+    const modelViewer = document.getElementById('model-viewer');
+
+    function goToMenu() {
+      welcome.style.display = "none";
+      menu.style.display = "flex";
     }
 
-    function openModel(filename) {
-      const baseUrl = "https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/";
-      const viewer = document.getElementById("viewer");
-      viewer.src = baseUrl + filename;
+    function loadModel(fileName) {
+      const modelURL = baseURL + fileName;
+      modelViewer.setAttribute('src', modelURL);
+      menu.style.display = "none";
+      viewer.style.display = "flex";
+    }
 
-      goToScene(3);
+    function goBack() {
+      viewer.style.display = "none";
+      menu.style.display = "flex";
     }
   </script>
 
