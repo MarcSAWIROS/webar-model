@@ -57,10 +57,16 @@
     const modelName = urlParams.get('model');
     const viewer = document.getElementById('modelViewer');
 
-    if (modelName) {
-      viewer.src = modelName;
+    // Update these paths to the raw GitHub URLs of your models
+    const modelPaths = {
+      'church_cross.glb': 'https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/church_cross.glb',
+      'Astronaut.glb': 'https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/Astronaut.glb'
+    };
+
+    if (modelName && modelPaths[modelName]) {
+      viewer.src = modelPaths[modelName];
     } else {
-      alert('No model selected!');
+      alert('Model not found!');
     }
   </script>
 
