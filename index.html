@@ -9,7 +9,7 @@
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(to top, #1e3c72, #2a5298); /* Sky background */
+      background: linear-gradient(to top, #1e3c72, #2a5298); /* Sky blue gradient */
       color: white;
       text-align: center;
       overflow: hidden;
@@ -29,13 +29,14 @@
       display: flex;
     }
 
+    /* Updated button styles */
     button {
       padding: 20px 40px;
       margin: 15px;
       font-size: 22px;
       border: none;
-      border-radius: 30px;
-      background-color: #3498db; /* Blue */
+      border-radius: 25px; /* Rounded button edges */
+      background-color: #4285F4; /* Blue color */
       color: white;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.3s ease-in-out, box-shadow 0.3s;
@@ -45,9 +46,9 @@
     }
 
     button:hover {
-      background-color: #2980b9;
+      background-color: #356ac3; /* Darker blue */
       transform: scale(1.1);
-      box-shadow: 0 0 25px rgba(72, 235, 255, 0.8); /* Light blue glow */
+      box-shadow: 0 0 15px rgba(66, 133, 244, 0.8); /* Blue glow */
     }
 
     button:active {
@@ -56,7 +57,7 @@
 
     .back-button {
       position: absolute;
-      bottom: 20px; /* Moved to the bottom */
+      bottom: 20px; /* Moved down */
       left: 20px;
       font-size: 24px;
       background-color: transparent;
@@ -104,7 +105,7 @@
     input {
       padding: 15px;
       font-size: 18px;
-      border: 2px solid #3498db;
+      border: 2px solid #4285F4;
       border-radius: 10px;
       background-color: #fff;
       margin: 20px;
@@ -143,132 +144,73 @@
 
     /* Confetti Animation */
     .confetti {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
+      width: 100vw;
+      height: 100vh;
       pointer-events: none;
-      z-index: 1000;
-      animation: confetti 4s infinite;
+      z-index: 9999;
+      opacity: 0;
+      animation: confettiFall 3s ease-out forwards;
     }
 
-    @keyframes confetti {
+    @keyframes confettiFall {
       0% {
-        transform: translateY(-100vh) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 1;
-      }
-    }
-
-    /* Fireworks Animation */
-    .fireworks {
-      position: absolute;
-      top: 10%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100px;
-      height: 100px;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(255, 215, 0, 0.5));
-      border-radius: 50%;
-      box-shadow: 0 0 20px rgba(255, 215, 0, 1);
-      animation: fireworks 2s infinite ease-in-out;
-    }
-
-    @keyframes fireworks {
-      0% {
-        opacity: 1;
-        transform: scale(1) rotate(0deg);
-      }
-      50% {
-        opacity: 0.5;
-        transform: scale(1.5) rotate(90deg);
+        opacity: 0;
+        transform: translateY(-100%);
       }
       100% {
         opacity: 1;
-        transform: scale(1) rotate(0deg);
+        transform: translateY(100vh);
       }
     }
 
-    /* Dancing font effect for the message */
+    /* Animated Font */
     .dancing-text {
       display: inline-block;
-      animation: dance 1.5s infinite ease-in-out;
+      animation: dance 1.5s infinite;
     }
 
     @keyframes dance {
-      0% {
-        transform: rotate(-5deg);
-      }
-      50% {
-        transform: rotate(5deg);
-      }
-      100% {
-        transform: rotate(-5deg);
-      }
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      50% { transform: rotate(-5deg); }
+      75% { transform: rotate(3deg); }
+      100% { transform: rotate(0deg); }
     }
-
-    /* Colorful Background Animation */
-    .background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, #ff6347, #ff1493, #ff69b4, #ff00ff, #00bfff);
-      animation: gradientAnimation 8s infinite alternate;
-      z-index: -1;
-    }
-
-    @keyframes gradientAnimation {
-      0% {
-        background: linear-gradient(45deg, #ff6347, #ff1493, #ff69b4, #ff00ff, #00bfff);
-      }
-      50% {
-        background: linear-gradient(45deg, #8a2be2, #7fff00, #d2691e, #ff4500, #ff6347);
-      }
-      100% {
-        background: linear-gradient(45deg, #ff6347, #ff1493, #ff69b4, #ff00ff, #00bfff);
-      }
-    }
-
   </style>
 </head>
 <body>
-
-  <div class="background"></div> <!-- Colorful background -->
 
   <!-- Logo -->
   <img class="logo" src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/channels4_profile.jpg" alt="Logo" />
 
   <!-- Welcome Scene -->
   <div id="welcomeScene" class="scene active">
-    <img class="resurrection-image" src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/images.jpg" />
     <h1>كنيسة الملاك ميخائيل</h1>
     <h2>مدارس الأحد (إبتدائي)</h2>
     <h1>عيد القيامة المجيد</h1>
     <input type="text" id="nameField" placeholder="أدخل اسمك هنا" />
-    <button onclick="submitName()">Start</button>
+    <button onclick="goToScene('nameInput')">Start</button>
+  </div>
+
+  <!-- Name Input Scene -->
+  <div id="nameInput" class="scene">
+    <button onclick="submitName()">تأكيد</button>
   </div>
 
   <!-- Personalized Message Scene -->
   <div id="personalizedMessage" class="scene">
     <h2>المسيح قام يا <span id="personalName" class="dancing-text"></span></h2>
-    <!-- Confetti -->
-    <div class="confetti"></div>
-    <div class="confetti" style="animation-delay: 1s;"></div>
-    <div class="confetti" style="animation-delay: 2s;"></div>
-    <div class="fireworks"></div>
-    <div class="fireworks" style="top: 20%;"></div>
-    <div class="fireworks" style="top: 30%;"></div>
-    <div class="fireworks" style="top: 40%;"></div>
+    <div class="confetti"></div> <!-- Confetti container -->
     <button onclick="goToScene('modelSelector')">التالي</button>
   </div>
 
   <!-- Model Selection Scene -->
   <div id="modelSelector" class="scene">
-    <h2>Choose your gift</h2>
+    <h2>اختر هديتك</h2>
+    <h2>مرحباً يا <span id="personalNameSelector"></span></h2> <!-- Added name -->
     <div class="gift-container">
       <div class="gift-box" onclick="openGift(this, 'church_cross')">Model 1</div>
       <div class="gift-box" onclick="openGift(this, 'tomb')">Model 2</div>
@@ -296,24 +238,57 @@
     }
 
     function submitName() {
-      const name = document.getElementById("nameField").value;
-      document.getElementById("personalName").innerText = name || 'عزيز';
-      goToScene('personalizedMessage');
+      const name = document.getElementById('nameField').value;
+      if (name.trim() !== '') {
+        document.getElementById('personalName').innerText = name;
+        document.getElementById('personalNameSelector').innerText = name;
+        goToScene('personalizedMessage');
+      } else {
+        alert('Please enter your name');
+      }
     }
 
-    function openGift(giftElement, modelId) {
-      giftElement.style.transform = "scale(0.9)";
+    function openGift(element, modelName) {
+      element.classList.add('opening');
       setTimeout(() => {
-        giftElement.style.transform = "scale(1)";
-        // Switch to AR scene with selected model
-        document.getElementById("modelViewer").setAttribute('src', `path_to_models/${modelId}.glb`);
-        goToScene('arScene');
-      }, 200);
+        loadModel(modelName);
+      }, 600);
+    }
+
+    function loadModel(modelName) {
+      const viewer = document.getElementById('modelViewer');
+      const baseURL = 'https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/';
+      let modelFile = '';
+
+      switch (modelName) {
+        case 'church_cross':
+          modelFile = 'church_cross.glb';
+          break;
+        case 'tomb':
+          modelFile = 'Tomb1.glb';
+          break;
+        case 'crown':
+          modelFile = 'Crown.glb';
+          break;
+        default:
+          modelFile = 'church_cross.glb';
+      }
+
+      viewer.setAttribute('src', baseURL + modelFile);
+      goToScene('arScene');
+
+      setTimeout(() => {
+        viewer.activateAR();
+      }, 300);
     }
 
     function goBack() {
+      const viewer = document.getElementById('modelViewer');
+      viewer.pause();
+      viewer.removeAttribute('src');
       goToScene('modelSelector');
     }
   </script>
+
 </body>
 </html>
