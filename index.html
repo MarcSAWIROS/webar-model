@@ -12,6 +12,7 @@
       background: linear-gradient(to bottom, #000428, #004e92);
       color: white;
       text-align: center;
+      overflow: hidden;
     }
 
     .scene {
@@ -26,30 +27,6 @@
 
     .scene.active {
       display: flex;
-    }
-
-    button {
-      padding: 15px 30px;
-      margin: 10px;
-      font-size: 18px;
-      border: none;
-      border-radius: 10px;
-      background-color: #00c6ff;
-      color: black;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
-      z-index: 10;
-    }
-
-    button:hover {
-      background-color: #0072ff;
-      transform: scale(1.05);
-    }
-
-    .back-button {
-      position: absolute;
-      top: 20px;
-      left: 20px;
     }
 
     model-viewer {
@@ -86,29 +63,110 @@
       }
     }
 
-    h1, h2, h3 {
-      margin: 10px 0;
+    .gift-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 40px;
     }
 
-    /* Gift Box Styling */
     .gift-box {
       width: 120px;
       height: 120px;
-      margin: 20px;
+      background: url('https://cdn-icons-png.flaticon.com/512/3309/3309752.png') center/contain no-repeat;
+      position: relative;
       cursor: pointer;
-      transition: transform 0.4s ease, opacity 0.4s ease;
+      transition: transform 0.3s ease;
     }
 
     .gift-box.opening {
-      transform: scale(1.3);
-      opacity: 0;
+      animation: openGift 0.5s forwards;
     }
 
-    .gift-container {
-      display: flex;
-      gap: 30px;
-      flex-wrap: wrap;
-      justify-content: center;
+    @keyframes openGift {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); opacity: 0; }
+    }
+
+    .gift-label {
+      position: absolute;
+      bottom: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 16px;
+      background: #fff;
+      color: #000;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+
+    .confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .confetti > div {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #fff;
+      opacity: 0.8;
+      border-radius: 50%;
+      animation: fall 2s linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-100vh) rotate(0);
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+      }
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 12px 20px;
+      font-size: 16px;
+      background-color: #00c6ff;
+      border: none;
+      border-radius: 8px;
+      color: black;
+      cursor: pointer;
+    }
+
+    button.start-button {
+      padding: 15px 30px;
+      margin-top: 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background-color: #00c6ff;
+      color: black;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      z-index: 10;
+    }
+
+    button.start-button:hover {
+      background-color: #0072ff;
+      transform: scale(1.05);
+    }
+
+    #welcomeScene {
+      background: url('/mnt/data/A_2D_digital_illustration_welcome_screen_for_an_in.png') center/cover no-repeat;
+      color: white;
+      text-shadow: 1px 1px 4px #000;
     }
   </style>
 </head>
@@ -123,16 +181,22 @@
     <h1>كنيسة الملاك ميخائيل</h1>
     <h2>مدارس الأحد (إبتدائي)</h2>
     <h1>عيد القيامة المجيد</h1>
-    <button onclick="playSound(); goToScene('modelSelector')">Start</button>
+    <button class="start-button" onclick="playSound(); goToScene('modelSelector')">Start</button>
   </div>
 
   <!-- Model Selection Scene -->
   <div id="modelSelector" class="scene">
-    <h2>Choose your gift</h2>
-    <div class="gift-container">
-      <img src="https://cdn-icons-png.flaticon.com/512/3487/3487655.png" alt="Church Cross" class="gift-box" onclick="openGift(this, 'church_cross')" />
-      <img src="https://cdn-icons-png.flaticon.com/512/3487/3487655.png" alt="Tomb" class="gift-box" onclick="openGift(this, 'tomb')" />
-      <img src="https://cdn-icons-png.flaticon.com/512/3487/3487655.png" alt="Crown" class="gift-box" onclick="openGift(this, 'crown')" />
+    <h2>Choose your model</h2>
+    <div class="gift-buttons">
+      <div class="gift-box" onclick="openGift(this, 'church_cross')">
+        <div class="gift-label">✝️ الصليب</div>
+      </div>
+      <div class="gift-box" onclick="openGift(this, 'tomb')">
+        <div class="gift-label">⚰️ القبر</div>
+      </div>
+      <div class="gift-box" onclick="openGift(this, 'crown')">
+        <div class="gift-label">👑 التاج</div>
+      </div>
     </div>
   </div>
 
@@ -149,6 +213,9 @@
     </model-viewer>
   </div>
 
+  <!-- Confetti Container -->
+  <div id="confetti" class="confetti"></div>
+
   <script>
     function goToScene(sceneId) {
       document.querySelectorAll('.scene').forEach(el => el.classList.remove('active'));
@@ -157,10 +224,10 @@
 
     function openGift(element, modelName) {
       element.classList.add('opening');
-
+      launchConfetti();
       setTimeout(() => {
         loadModel(modelName);
-      }, 600); // Wait for box "open" animation
+      }, 600);
     }
 
     function loadModel(modelName) {
@@ -168,39 +235,43 @@
       const baseURL = 'https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/';
       let modelFile = '';
 
-      switch (modelName) {
-        case 'church_cross':
-          modelFile = 'church_cross.glb';
-          break;
-        case 'tomb':
-          modelFile = 'Tomb1.glb';
-          break;
-        case 'crown':
-          modelFile = 'Crown.glb';
-          break;
-        default:
-          modelFile = 'church_cross.glb';
-      }
+      if (modelName === 'church_cross') modelFile = 'church_cross.glb';
+      else if (modelName === 'tomb') modelFile = 'Tomb1.glb';
+      else if (modelName === 'crown') modelFile = 'Crown.glb';
 
       viewer.setAttribute('src', baseURL + modelFile);
       goToScene('arScene');
 
       setTimeout(() => {
         viewer.activateAR();
-      }, 300);
+      }, 500);
     }
 
     function goBack() {
       const viewer = document.getElementById('modelViewer');
-
       viewer.pause();
       viewer.removeAttribute('src');
-
       goToScene('modelSelector');
     }
 
     function playSound() {
-      // Optional sound effect on "Start"
+      // You can add audio later if needed
+    }
+
+    function launchConfetti() {
+      const confetti = document.getElementById('confetti');
+      confetti.innerHTML = '';
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        particle.style.animationDuration = `${Math.random() * 2 + 1}s`;
+        particle.style.opacity = Math.random();
+        confetti.appendChild(particle);
+      }
+
+      // Clear confetti after 2.5s
+      setTimeout(() => confetti.innerHTML = '', 2500);
     }
   </script>
 
