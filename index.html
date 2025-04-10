@@ -17,7 +17,8 @@
       height: 100vh;
       overflow: hidden;
     }
-    #welcome, #menu, #viewer {
+
+    #welcome, #menu {
       display: none;
       flex-direction: column;
       align-items: center;
@@ -28,14 +29,17 @@
       padding: 20px;
       box-sizing: border-box;
     }
+
     #welcome {
       display: flex;
       background: radial-gradient(#333, #111);
     }
+
     h1 {
       font-size: 2rem;
       margin-bottom: 1rem;
     }
+
     button {
       padding: 12px 24px;
       font-size: 1.1rem;
@@ -46,23 +50,20 @@
       cursor: pointer;
       margin: 10px;
     }
+
     button:hover {
       background: #0097a7;
     }
-    #model-buttons button {
-      width: 80%;
-    }
-    #viewer {
-      background: #000;
-    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.98); }
       to { opacity: 1; transform: scale(1); }
     }
+
     model-viewer {
-      width: 100%;
-      height: 100%;
-      background: #000;
+      display: none;
+      width: 0;
+      height: 0;
     }
   </style>
 </head>
@@ -70,40 +71,33 @@
 
   <!-- Welcome Screen -->
   <div id="welcome">
-    <h1>Welcome to WebAR Experience</h1>
+    <h1>al malak churche</h1>
     <button onclick="goToMenu()">Start</button>
   </div>
 
   <!-- Model Selection Menu -->
   <div id="menu">
     <h1>Select a Model</h1>
-    <div id="model-buttons">
-      <button onclick="loadModel('church_cross.glb')">Church Cross</button>
-      <button onclick="loadModel('Astronaut.glb')">Astronaut</button>
-      <!-- Add more buttons here if needed -->
-    </div>
+    <button onclick="launchAR('church_cross.glb')">Church Cross</button>
+    <button onclick="launchAR('Astronaut.glb')">Astronaut</button>
+    <!-- Add more model buttons here -->
   </div>
 
-  <!-- Model Viewer -->
-  <div id="viewer">
-    <model-viewer
-      id="model-viewer"
-      alt="3D Model"
-      ar
-      ar-modes="webxr scene-viewer quick-look"
-      auto-rotate
-      camera-controls
-      shadow-intensity="1"
-      exposure="1">
-    </model-viewer>
-    <button onclick="goBack()" style="position: absolute; top: 10px; left: 10px;">Back</button>
-  </div>
+  <!-- Hidden Model Viewer for AR Launch -->
+  <model-viewer
+    id="model-viewer"
+    ar
+    ar-modes="webxr scene-viewer quick-look"
+    camera-controls
+    exposure="1"
+    shadow-intensity="1"
+    style="position: absolute;">
+  </model-viewer>
 
   <script>
     const baseURL = "https://marcsawiros.github.io/webar-model/";
     const welcome = document.getElementById('welcome');
     const menu = document.getElementById('menu');
-    const viewer = document.getElementById('viewer');
     const modelViewer = document.getElementById('model-viewer');
 
     function goToMenu() {
@@ -111,16 +105,13 @@
       menu.style.display = "flex";
     }
 
-    function loadModel(fileName) {
+    function launchAR(fileName) {
       const modelURL = baseURL + fileName;
-      modelViewer.setAttribute('src', modelURL);
-      menu.style.display = "none";
-      viewer.style.display = "flex";
-    }
-
-    function goBack() {
-      viewer.style.display = "none";
-      menu.style.display = "flex";
+      modelViewer.setAttribute("src", modelURL);
+      // Wait for model to load before invoking AR
+      modelViewer.addEventListener('load', () => {
+        modelViewer.activateAR();
+      }, { once: true });
     }
   </script>
 
