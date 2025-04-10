@@ -1,49 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AR Model Viewer</title>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.2.0/dist/model-viewer.min.js"></script>
   <style>
     body {
       margin: 0;
-      padding: 0;
-      background: linear-gradient(120deg, #1e3c72, #2a5298);
-      height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
       display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .scene {
+      display: none;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      font-family: Arial, sans-serif;
-      color: white;
       text-align: center;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .scene.active {
+      display: flex;
     }
 
     h1 {
-      font-size: 2.5em;
-      margin-bottom: 40px;
+      font-size: 2rem;
+      margin-bottom: 1rem;
     }
 
     button {
-      font-size: 1.5em;
-      padding: 15px 30px;
-      background-color: #00c9a7;
+      padding: 1rem 2rem;
+      margin: 1rem;
+      font-size: 1rem;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
+      background: #4CAF50;
       color: white;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background 0.3s ease;
     }
 
     button:hover {
-      background-color: #008d78;
+      background: #45a049;
+    }
+
+    model-viewer {
+      width: 100vw;
+      height: 100vh;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
   </style>
 </head>
 <body>
 
-  <h1>Welcome to My AR Gallery</h1>
-  <button onclick="location.href='model-selection.html'">Start</button>
+  <!-- Welcome Screen -->
+  <div class="scene active" id="welcomeScene">
+    <h1>Welcome to AR mm</h1>
+    <button onclick="goToScene('modelSelectScene')">Start</button>
+  </div>
+
+  <!-- Model Select Screen -->
+  <div class="scene" id="modelSelectScene">
+    <h1>Select a 3D Model</h1>
+    <button onclick="loadModel('church_cross')">View Church Cross</button>
+    <button onclick="loadModel('astronaut')">View Astronaut</button>
+  </div>
+
+  <!-- AR Viewer -->
+  <div class="scene" id="arScene">
+    <model-viewer 
+      id="modelViewer"
+      alt="3D Model"
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      auto-rotate
+      camera-controls>
+    </model-viewer>
+  </div>
+
+  <script>
+    const scenes = {
+      welcomeScene: document.getElementById('welcomeScene'),
+      modelSelectScene: document.getElementById('modelSelectScene'),
+      arScene: document.getElementById('arScene'),
+    };
+
+    function goToScene(sceneId) {
+      Object.values(scenes).forEach(scene => scene.classList.remove('active'));
+      scenes[sceneId].classList.add('active');
+    }
+
+    function loadModel(modelName) {
+      const viewer = document.getElementById('modelViewer');
+      const baseURL = 'https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/';
+      const modelFile = modelName === 'church_cross' ? 'church_cross.glb' : 'Astronaut.glb';
+      viewer.setAttribute('src', baseURL + modelFile);
+      goToScene('arScene');
+    }
+  </script>
 
 </body>
 </html>
