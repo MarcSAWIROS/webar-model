@@ -35,7 +35,7 @@
       font-size: 22px;
       border: none;
       border-radius: 30px;
-      background-color: #4CAF50; /* Greenish blue */
+      background-color: #4CAF50; /* Blue */
       color: white;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.3s ease-in-out, box-shadow 0.3s;
@@ -148,7 +148,7 @@
       left: 0;
       pointer-events: none;
       z-index: 1000;
-      animation: confetti 5s infinite;
+      animation: confetti 3s infinite;
     }
 
     @keyframes confetti {
@@ -157,6 +157,35 @@
       }
       100% {
         transform: translateY(100vh) rotate(360deg);
+      }
+    }
+
+    /* Fireworks Animation */
+    .fireworks {
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(255, 215, 0, 0.5));
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 1);
+      animation: fireworks 2s infinite ease-in-out;
+    }
+
+    @keyframes fireworks {
+      0% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+      }
+      50% {
+        opacity: 0.5;
+        transform: scale(1.5) rotate(90deg);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
       }
     }
 
@@ -195,17 +224,15 @@
     <button onclick="submitName()">Start</button>
   </div>
 
-  <!-- Name Input Scene -->
-  <div id="nameInput" class="scene">
-    <h2>أدخل اسمك</h2>
-    <input type="text" id="nameField" placeholder="أدخل اسمك هنا" />
-    <button onclick="submitName()">تأكيد</button>
-  </div>
-
   <!-- Personalized Message Scene -->
   <div id="personalizedMessage" class="scene">
     <h2>المسيح قام يا <span id="personalName" class="dancing-text"></span></h2>
+    <!-- Confetti -->
     <div class="confetti"></div>
+    <div class="fireworks"></div>
+    <div class="fireworks" style="top: 20%;"></div>
+    <div class="fireworks" style="top: 30%;"></div>
+    <div class="fireworks" style="top: 40%;"></div>
     <button onclick="goToScene('modelSelector')">التالي</button>
   </div>
 
