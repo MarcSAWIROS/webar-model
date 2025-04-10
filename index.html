@@ -35,7 +35,7 @@
       font-size: 22px;
       border: none;
       border-radius: 30px;
-      background-color: #4CAF50; /* Blue */
+      background-color: #3498db; /* Blue */
       color: white;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.3s ease-in-out, box-shadow 0.3s;
@@ -45,7 +45,7 @@
     }
 
     button:hover {
-      background-color: #45a049;
+      background-color: #2980b9;
       transform: scale(1.1);
       box-shadow: 0 0 25px rgba(72, 235, 255, 0.8); /* Light blue glow */
     }
@@ -104,7 +104,7 @@
     input {
       padding: 15px;
       font-size: 18px;
-      border: 2px solid #4CAF50;
+      border: 2px solid #3498db;
       border-radius: 10px;
       background-color: #fff;
       margin: 20px;
@@ -148,15 +148,17 @@
       left: 0;
       pointer-events: none;
       z-index: 1000;
-      animation: confetti 3s infinite;
+      animation: confetti 4s infinite;
     }
 
     @keyframes confetti {
       0% {
         transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
       }
       100% {
         transform: translateY(100vh) rotate(360deg);
+        opacity: 1;
       }
     }
 
@@ -166,8 +168,8 @@
       top: 10%;
       left: 50%;
       transform: translateX(-50%);
-      width: 80px;
-      height: 80px;
+      width: 100px;
+      height: 100px;
       background: radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(255, 215, 0, 0.5));
       border-radius: 50%;
       box-shadow: 0 0 20px rgba(255, 215, 0, 1);
@@ -207,9 +209,35 @@
       }
     }
 
+    /* Colorful Background Animation */
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #ff6347, #ff1493, #ff69b4, #ff00ff, #00bfff);
+      animation: gradientAnimation 8s infinite alternate;
+      z-index: -1;
+    }
+
+    @keyframes gradientAnimation {
+      0% {
+        background: linear-gradient(45deg, #ff6347, #ff1493, #ff69b4, #ff00ff, #00bfff);
+      }
+      50% {
+        background: linear-gradient(45deg, #8a2be2, #7fff00, #d2691e, #ff4500, #ff6347);
+      }
+      100% {
+        background: linear-gradient(45deg, #ff6347, #ff1493, #ff69b4, #ff00ff, #00bfff);
+      }
+    }
+
   </style>
 </head>
 <body>
+
+  <div class="background"></div> <!-- Colorful background -->
 
   <!-- Logo -->
   <img class="logo" src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/channels4_profile.jpg" alt="Logo" />
@@ -229,6 +257,8 @@
     <h2>المسيح قام يا <span id="personalName" class="dancing-text"></span></h2>
     <!-- Confetti -->
     <div class="confetti"></div>
+    <div class="confetti" style="animation-delay: 1s;"></div>
+    <div class="confetti" style="animation-delay: 2s;"></div>
     <div class="fireworks"></div>
     <div class="fireworks" style="top: 20%;"></div>
     <div class="fireworks" style="top: 30%;"></div>
@@ -266,59 +296,24 @@
     }
 
     function submitName() {
-      const name = document.getElementById('nameField').value;
-      if (name.trim() !== '') {
-        document.getElementById('personalName').innerText = name;
-        goToScene('personalizedMessage');
-      } else {
-        alert('Please enter your name.');
-      }
+      const name = document.getElementById("nameField").value;
+      document.getElementById("personalName").innerText = name || 'عزيز';
+      goToScene('personalizedMessage');
     }
 
-    function openGift(element, modelName) {
-      element.classList.add('opening');
-
+    function openGift(giftElement, modelId) {
+      giftElement.style.transform = "scale(0.9)";
       setTimeout(() => {
-        loadModel(modelName);
-      }, 600); // Wait for box "open" animation
-    }
-
-    function loadModel(modelName) {
-      const viewer = document.getElementById('modelViewer');
-      const baseURL = 'https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/';
-      let modelFile = '';
-
-      switch (modelName) {
-        case 'church_cross':
-          modelFile = 'church_cross.glb';
-          break;
-        case 'tomb':
-          modelFile = 'Tomb1.glb';
-          break;
-        case 'crown':
-          modelFile = 'Crown.glb';
-          break;
-        default:
-          modelFile = 'church_cross.glb';
-      }
-
-      viewer.setAttribute('src', baseURL + modelFile);
-      goToScene('arScene');
-
-      setTimeout(() => {
-        viewer.activateAR();
-      }, 300);
+        giftElement.style.transform = "scale(1)";
+        // Switch to AR scene with selected model
+        document.getElementById("modelViewer").setAttribute('src', `path_to_models/${modelId}.glb`);
+        goToScene('arScene');
+      }, 200);
     }
 
     function goBack() {
-      const viewer = document.getElementById('modelViewer');
-
-      viewer.pause();
-      viewer.removeAttribute('src');
-
       goToScene('modelSelector');
     }
   </script>
-
 </body>
 </html>
