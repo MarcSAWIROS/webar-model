@@ -5,16 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AR Viewer</title>
   <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.2.0/dist/model-viewer.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
-
   <style>
     body {
       margin: 0;
-      font-family: 'Fredoka One', cursive;
-      background: linear-gradient(to bottom, #000000, #003366);
-      text-align: center;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom, #000428, #004e92);
       color: white;
-      overflow: hidden;
+      text-align: center;
     }
 
     .scene {
@@ -23,7 +20,8 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
-      animation: fadeIn 1s ease-in-out;
+      padding: 20px;
+      position: relative;
     }
 
     .scene.active {
@@ -33,18 +31,19 @@
     button {
       padding: 15px 30px;
       margin: 10px;
-      font-size: 20px;
+      font-size: 18px;
       border: none;
-      border-radius: 15px;
-      background-color: #00aaff;
-      color: white;
+      border-radius: 10px;
+      background-color: #00c6ff;
+      color: black;
       cursor: pointer;
-      transition: transform 0.3s, background-color 0.3s;
+      transition: background-color 0.3s, transform 0.2s;
+      z-index: 10;
     }
 
     button:hover {
-      background-color: #0077cc;
-      transform: scale(1.1);
+      background-color: #0072ff;
+      transform: scale(1.05);
     }
 
     .back-button {
@@ -60,54 +59,62 @@
 
     .logo {
       position: absolute;
-      top: 20px;
+      top: 10px;
       left: 50%;
       transform: translateX(-50%);
       max-width: 120px;
       border-radius: 50%;
-      box-shadow: 0 0 15px #00aaff;
-      animation: float 3s ease-in-out infinite;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+      z-index: 5;
     }
 
-    h1, h2 {
+    .resurrection-image {
+      max-width: 300px;
+      border-radius: 20px;
+      margin-top: 80px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+      animation: glow 3s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+      }
+      50% {
+        box-shadow: 0 0 40px rgba(255, 255, 255, 1);
+      }
+    }
+
+    h1, h2, h3 {
       margin: 10px 0;
-      text-shadow: 2px 2px 4px #000;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(-10px); }
     }
   </style>
 </head>
 <body>
 
   <!-- Logo -->
-  <img class="logo" src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/channels4_profile.jpg" alt="Logo">
+  <img class="logo" src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/channels4_profile.jpg" alt="Logo" />
 
   <!-- Welcome Scene -->
   <div id="welcomeScene" class="scene active">
+    <img class="resurrection-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Resurrection_of_Christ_by_Carl_Heinrich_Bloch.jpg/640px-Resurrection_of_Christ_by_Carl_Heinrich_Bloch.jpg" alt="Jesus Resurrection" />
     <h1>كنيسة الملاك ميخائيل</h1>
-    <h2>مدارس الأحد (إبتدائي)</h2>
-    <h1>🎉 عيد القيامة المجيد 🎉</h1>
-    <button onclick="playSound(); goToScene('modelSelector')">ابدأ</button>
+    <h1>مدارس الأحد (إبتدائي)</h1>
+    <h1>عيد القيامة المجيد</h1>
+    <button onclick="playSound(); goToScene('modelSelector')">Start</button>
   </div>
 
   <!-- Model Selection Scene -->
   <div id="modelSelector" class="scene">
-    <h2>اختر النموذج</h2>
-    <button onclick="playSound(); loadModel('church_cross')">Church Cross</button>
-    <button onclick="playSound(); loadModel('Astronaut')">Astronaut</button>
+    <h2>Choose your model</h2>
+    <button onclick="loadModel('church_cross')">Church Cross</button>
+    <button onclick="loadModel('Astronaut')">Astronaut</button>
   </div>
 
   <!-- AR Viewer Scene -->
   <div id="arScene" class="scene">
-    <button class="back-button" onclick="playSound(); goBack()">← رجوع</button>
+    <button class="back-button" onclick="goBack()">← Back</button>
     <model-viewer
       id="modelViewer"
       alt="3D Model"
@@ -117,9 +124,6 @@
       camera-controls>
     </model-viewer>
   </div>
-
-  <!-- Sound Effect -->
-  <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_599fdb0c43.mp3" preload="auto"></audio>
 
   <script>
     function goToScene(sceneId) {
@@ -132,7 +136,10 @@
       const baseURL = 'https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/';
       const modelFile = modelName === 'church_cross' ? 'church_cross.glb' : 'Astronaut.glb';
       viewer.setAttribute('src', baseURL + modelFile);
+
       goToScene('arScene');
+
+      // Auto-launch AR mode after a short delay
       setTimeout(() => {
         viewer.activateAR();
       }, 1200);
@@ -140,15 +147,17 @@
 
     function goBack() {
       const viewer = document.getElementById('modelViewer');
-      viewer.pause();
-      viewer.removeAttribute('src');
+
+      viewer.pause();  // Stop animation
+      viewer.removeAttribute('src');  // Clear model
+
       goToScene('modelSelector');
     }
 
     function playSound() {
-      const sound = document.getElementById('clickSound');
-      sound.currentTime = 0;
-      sound.play();
+      // Placeholder if you want to play sound when "Start" is clicked
+      // const audio = new Audio('your-sound-file.mp3');
+      // audio.play();
     }
   </script>
 
