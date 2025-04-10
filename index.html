@@ -72,7 +72,7 @@
     /* Back Button */
     .back-button {
       position: absolute;
-      top: 60px;  /* Moved down a bit */
+      top: 120px;  /* Moved the back button lower to avoid covering the logo */
       left: 20px; /* Top-left corner */
       font-size: 24px;
       background-color: transparent;
@@ -116,7 +116,7 @@
     }
 
     h1, h2, h3 {
-      margin: 10px 0;
+      margin: 5px 0; /* Reduced margin between the Arabic phrases */
     }
 
     /* Fun Gift Box Styling - Blue with White Text */
@@ -174,9 +174,9 @@
   <div id="modelSelector" class="scene">
     <h2>المسيح قام يا <span id="kidName"></span></h2>
     <div class="gift-container">
-      <div class="gift-box" onclick="openGift(this, 'church_cross')">صليب الكنيسة</div>
+      <div class="gift-box" onclick="openGift(this, 'church_cross')">صليب</div>
       <div class="gift-box" onclick="openGift(this, 'tomb')">القبر</div>
-      <div class="gift-box" onclick="openGift(this, 'crown')">التاج</div>
+      <div class="gift-box" onclick="openGift(this, 'crown')">إكليل الشوك</div>
     </div>
   </div>
 
@@ -203,7 +203,7 @@
         document.getElementById('kidName').textContent = kidName;
         goToScene('modelSelector');
       } else {
-        alert("Please enter your name!");
+        alert("إكتب إسمك الأول");
       }
     }
 
