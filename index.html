@@ -1,198 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AR Viewer</title>
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.2.0/dist/model-viewer.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Ramadan Gift</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <style>
     body {
-      margin: 0;
       font-family: 'Arial', sans-serif;
-      background-color: #fff;
-      color: black;
-      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: #fff;
     }
-
     .scene {
       display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      padding: 20px;
-      position: relative;
+      text-align: center;
+      padding: 40px 20px;
     }
-
     .scene.active {
-      display: flex;
+      display: block;
     }
-
+    input[type="text"] {
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-top: 20px;
+      width: 80%;
+      max-width: 300px;
+    }
     button {
-      padding: 20px 40px;
-      margin: 15px;
-      font-size: 22px;
+      padding: 12px 24px;
+      font-size: 18px;
+      margin-top: 20px;
       border: none;
-      border-radius: 15px;
-      background-color: #007bff;
+      border-radius: 8px;
+      background-color: #007BFF;
       color: white;
       cursor: pointer;
-      transition: background-color 0.3s, transform 0.3s ease-in-out, box-shadow 0.3s;
-      z-index: 10;
-      font-weight: bold;
-      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-      text-align: center;
     }
-
     button:hover {
       background-color: #0056b3;
-      transform: scale(1.1);
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
     }
-
-    button:active {
-      transform: scale(0.95);
-    }
-
-    input[type="text"] {
-      padding: 10px 20px;
-      font-size: 20px;
-      margin: 15px;
-      border-radius: 15px;
-      border: 2px solid #007bff;
-      background-color: #fff;
-      color: black;
-      text-align: center;
-      width: 80%;
-      max-width: 350px;
-    }
-
-    .back-button {
-      position: absolute;
-      top: 120px;
-      left: 20px;
-      font-size: 24px;
-      background-color: transparent;
-      color: black;
-      cursor: pointer;
-      border: 2px solid white;
-      padding: 10px;
-      border-radius: 10px;
-      z-index: 10;
-    }
-
-    .logo {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      max-width: 120px;
-      border-radius: 50%;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
-      z-index: 5;
-    }
-
-    .resurrection-image {
-      max-width: 300px;
-      border-radius: 20px;
-      margin-top: 80px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
-      animation: glow 3s ease-in-out infinite;
-    }
-
-    @keyframes glow {
-      0%, 100% {
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
-      }
-      50% {
-        box-shadow: 0 0 40px rgba(255, 255, 255, 1);
-      }
-    }
-
-    h1, h2, h3 {
-      margin: 5px 0;
-    }
-
     .gift-box {
-      width: 120px;
-      height: 120px;
-      margin: 20px;
+      margin-top: 40px;
       cursor: pointer;
-      transition: transform 0.5s ease, opacity 0.4s ease;
-      border-radius: 15px;
-      background-color: #007bff;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 18px;
+    }
+    .gift-box img {
+      width: 150px;
+      transition: transform 0.5s ease;
+    }
+    .gift-box.opening img {
+      transform: rotateY(180deg);
+    }
+    model-viewer {
+      width: 100%;
+      height: 90vh;
+      background-color: #fff;
+    }
+    .back-button,
+    .flip-button {
+      position: absolute;
+      top: 20px;
+      padding: 10px 16px;
+      font-size: 16px;
+      border-radius: 8px;
+      z-index: 10;
+      border: none;
       font-weight: bold;
+      cursor: pointer;
     }
-
-    .gift-box:hover {
-      transform: scale(1.2) rotate(10deg);
-      box-shadow: 0 0 25px rgba(255, 255, 255, 1);
+    .back-button {
+      left: 20px;
+      background-color: #dc3545;
+      color: white;
     }
-
-    .gift-box:active {
-      transform: scale(1);
-      opacity: 0.7;
+    .back-button:hover {
+      background-color: #c82333;
     }
-
-    .gift-container {
-      display: flex;
-      gap: 30px;
-      flex-wrap: wrap;
-      justify-content: center;
+    .flip-button {
+      right: 20px;
+      background-color: #28a745;
+      color: white;
+    }
+    .flip-button:hover {
+      background-color: #218838;
     }
   </style>
 </head>
 <body>
 
-  <img class="logo" src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/channels4_profile.jpg" alt="Logo" />
-
-  <div id="welcomeScene" class="scene active">
-    <img class="resurrection-image" src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/images.jpg" />
-    <h1>كنيسة الملاك ميخائيل</h1>
-    <h2>مدارس الأحد (إبتدائي)</h2>
-    <h1>عيد القيامة المجيد</h1>
-    <input type="text" id="nameInput" placeholder="إسمك إيه؟" />
-    <button onclick="startExperience()">Start</button>
+  <!-- Scene 1: Name Input -->
+  <div id="nameInputScene" class="scene active">
+    <h2>اكتب اسمك الأول للبدء</h2>
+    <input type="text" id="nameInput" placeholder="الاسم الأول" />
+    <br>
+    <button onclick="startExperience()">ابدأ</button>
   </div>
 
+  <!-- Scene 2: Model Selection -->
   <div id="modelSelector" class="scene">
-    <h2>المسيح قام يا <span id="kidName"></span></h2>
-    <div class="gift-container">
-      <div class="gift-box" onclick="openGift(this, 'tomb')">القبر</div>
+    <h2>🎁 مرحبًا <span id="kidName"></span>، افتح هديتك 🎁</h2>
+    <div class="gift-box" onclick="openGift(this, 'tomb')">
+      <img src="https://cdn-icons-png.flaticon.com/512/6696/6696650.png" alt="Gift Box">
     </div>
   </div>
 
+  <!-- Scene 3: AR Viewer -->
   <div id="arScene" class="scene">
-    <button class="back-button" onclick="goBack()">← Back</button>
+    <button class="back-button" onclick="goBack()">← رجوع</button>
+    <button class="flip-button" onclick="toggleCamera()">🔄 قلب الكاميرا</button>
+
     <model-viewer
       id="modelViewer"
       alt="3D Model"
       ar
-      ar-modes="scene-viewer quick-look webxr"
+      ar-modes="webxr scene-viewer quick-look"
       auto-rotate
-      camera-controls>
+      camera-controls
+      exposure="1"
+      xr-environment>
     </model-viewer>
-    <button onclick="flipCamera()">استخدم الكاميرا الأمامية</button>
-    <audio id="soundEffect" src="https://cdn.pixabay.com/audio/2023/03/26/audio_54f7c25d91.mp3"></audio>
   </div>
 
   <script>
     let kidName = '';
-
-    function playSound() {
-      const sound = document.getElementById('soundEffect');
-      if (sound) {
-        sound.currentTime = 0;
-        sound.play();
-      }
-    }
+    let useFrontCamera = false; // default to back camera
 
     function startExperience() {
       kidName = document.getElementById('nameInput').value.trim();
@@ -211,6 +143,7 @@
 
     function openGift(element, modelName) {
       element.classList.add('opening');
+
       setTimeout(() => {
         loadModel(modelName);
       }, 600);
@@ -219,17 +152,16 @@
     function loadModel(modelName) {
       const viewer = document.getElementById('modelViewer');
       const baseURL = 'https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/';
-      let modelFile = '';
-
-      if (modelName === 'tomb') {
-        modelFile = 'Tomb1.glb';
-      } else {
-        modelFile = 'church_cross.glb';
-      }
+      const modelFile = 'Tomb1.glb'; // only tomb for now
 
       viewer.setAttribute('src', baseURL + modelFile);
+
+      // Update camera mode before entering AR
+      viewer.setAttribute('ar-camera', useFrontCamera ? 'user' : 'environment');
+
       goToScene('arScene');
 
+      // Wait a bit before launching AR
       setTimeout(() => {
         viewer.activateAR();
       }, 300);
@@ -242,22 +174,9 @@
       goToScene('modelSelector');
     }
 
-    function flipCamera() {
-      playSound();
-      const viewer = document.getElementById('modelViewer');
-      if (viewer.xrSession) {
-        viewer.xrSession.end();
-      }
-
-      navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user" }
-      }).then(() => {
-        viewer.setAttribute('ar-camera', 'facingMode: user');
-        viewer.activateAR();
-      }).catch(err => {
-        alert("لا يمكن استخدام الكاميرا الأمامية على هذا الجهاز");
-        console.error(err);
-      });
+    function toggleCamera() {
+      useFrontCamera = !useFrontCamera;
+      alert("تم التبديل إلى " + (useFrontCamera ? "الكاميرا الأمامية" : "الكاميرا الخلفية"));
     }
   </script>
 
