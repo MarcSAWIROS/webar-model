@@ -175,7 +175,6 @@
   <!-- AR Viewer Scene -->
   <div id="arScene" class="scene">
     <button class="back-button" onclick="goBack()">← Back</button>
-    <button class="back-button" onclick="toggleCamera()">Flip Camera</button> <!-- New Button -->
     <model-viewer
       id="modelViewer"
       alt="3D Model"
@@ -185,13 +184,12 @@
       camera-controls
       auto-rotate
       src=""
-      ar-camera="environment">
+      ar-camera="user">
     </model-viewer>
   </div>
 
   <script>
     let kidName = '';
-    let isFrontCamera = false;
 
     function startExperience() {
       kidName = document.getElementById('nameInput').value.trim();
@@ -241,18 +239,6 @@
       viewer.pause();
       viewer.removeAttribute('src');
       goToScene('modelSelector');
-    }
-
-    function toggleCamera() {
-      const viewer = document.getElementById('modelViewer');
-      isFrontCamera = !isFrontCamera;
-      if (isFrontCamera) {
-        viewer.setAttribute('ar-modes', 'quick-look webxr');
-        viewer.setAttribute('ar-camera', 'user');
-      } else {
-        viewer.setAttribute('ar-modes', 'scene-viewer webxr');
-        viewer.setAttribute('ar-camera', 'environment');
-      }
     }
   </script>
 </body>
