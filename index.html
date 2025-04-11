@@ -9,7 +9,7 @@
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
-      background-color: #fff; /* white background */
+      background-color: #fff;
       color: black;
       text-align: center;
     }
@@ -28,25 +28,24 @@
       display: flex;
     }
 
-    /* Button Styling - Blue with White Text */
     button {
       padding: 20px 40px;
       margin: 15px;
       font-size: 22px;
       border: none;
       border-radius: 15px;
-      background-color: #007bff; /* Blue button */
-      color: white; /* White text */
+      background-color: #007bff;
+      color: white;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.3s ease-in-out, box-shadow 0.3s;
       z-index: 10;
       font-weight: bold;
       text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-      text-align: center; /* Center text inside the button */
+      text-align: center;
     }
 
     button:hover {
-      background-color: #0056b3; /* Darker blue on hover */
+      background-color: #0056b3;
       transform: scale(1.1);
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
     }
@@ -55,7 +54,6 @@
       transform: scale(0.95);
     }
 
-    /* Input Field Styling */
     input[type="text"] {
       padding: 10px 20px;
       font-size: 20px;
@@ -69,11 +67,10 @@
       max-width: 350px;
     }
 
-    /* Back Button */
     .back-button {
       position: absolute;
-      top: 120px;  /* Moved the back button lower to avoid covering the logo */
-      left: 20px; /* Top-left corner */
+      top: 120px;
+      left: 20px;
       font-size: 24px;
       background-color: transparent;
       color: black;
@@ -84,7 +81,6 @@
       z-index: 10;
     }
 
-    /* Logo */
     .logo {
       position: absolute;
       top: 10px;
@@ -96,7 +92,6 @@
       z-index: 5;
     }
 
-    /* Resurrection Image */
     .resurrection-image {
       max-width: 300px;
       border-radius: 20px;
@@ -116,10 +111,9 @@
     }
 
     h1, h2, h3 {
-      margin: 5px 0; /* Reduced margin between the Arabic phrases */
+      margin: 5px 0;
     }
 
-    /* Fun Gift Box Styling - Blue with White Text */
     .gift-box {
       width: 120px;
       height: 120px;
@@ -127,12 +121,12 @@
       cursor: pointer;
       transition: transform 0.5s ease, opacity 0.4s ease;
       border-radius: 15px;
-      background-color: #007bff; /* Blue color for the gift box */
+      background-color: #007bff;
       box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
       display: flex;
       justify-content: center;
       align-items: center;
-      color: white; /* Text color inside button */
+      color: white;
       font-size: 18px;
       font-weight: bold;
     }
@@ -157,10 +151,8 @@
 </head>
 <body>
 
-  <!-- Logo -->
   <img class="logo" src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/channels4_profile.jpg" alt="Logo" />
 
-  <!-- Welcome Scene -->
   <div id="welcomeScene" class="scene active">
     <img class="resurrection-image" src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/images.jpg" />
     <h1>كنيسة الملاك ميخائيل</h1>
@@ -170,17 +162,13 @@
     <button onclick="startExperience()">Start</button>
   </div>
 
-  <!-- Model Selection Scene -->
   <div id="modelSelector" class="scene">
     <h2>المسيح قام يا <span id="kidName"></span></h2>
     <div class="gift-container">
-      <div class="gift-box" onclick="openGift(this, 'church_cross')">صليب</div>
       <div class="gift-box" onclick="openGift(this, 'tomb')">القبر</div>
-      <div class="gift-box" onclick="openGift(this, 'crown')">إكليل الشوك</div>
     </div>
   </div>
 
-  <!-- AR Viewer Scene -->
   <div id="arScene" class="scene">
     <button class="back-button" onclick="goBack()">← Back</button>
     <model-viewer
@@ -191,15 +179,24 @@
       auto-rotate
       camera-controls>
     </model-viewer>
+    <button onclick="flipCamera()">استخدم الكاميرا الأمامية</button>
+    <audio id="soundEffect" src="https://cdn.pixabay.com/audio/2023/03/26/audio_54f7c25d91.mp3"></audio>
   </div>
 
   <script>
     let kidName = '';
 
+    function playSound() {
+      const sound = document.getElementById('soundEffect');
+      if (sound) {
+        sound.currentTime = 0;
+        sound.play();
+      }
+    }
+
     function startExperience() {
       kidName = document.getElementById('nameInput').value.trim();
       if (kidName) {
-        // Show the model selection scene and set the personalized message
         document.getElementById('kidName').textContent = kidName;
         goToScene('modelSelector');
       } else {
@@ -214,10 +211,9 @@
 
     function openGift(element, modelName) {
       element.classList.add('opening');
-
       setTimeout(() => {
         loadModel(modelName);
-      }, 600); // Wait for box "open" animation
+      }, 600);
     }
 
     function loadModel(modelName) {
@@ -225,18 +221,10 @@
       const baseURL = 'https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/';
       let modelFile = '';
 
-      switch (modelName) {
-        case 'church_cross':
-          modelFile = 'church_cross.glb';
-          break;
-        case 'tomb':
-          modelFile = 'Tomb1.glb';
-          break;
-        case 'crown':
-          modelFile = 'Crown.glb';
-          break;
-        default:
-          modelFile = 'church_cross.glb';
+      if (modelName === 'tomb') {
+        modelFile = 'Tomb1.glb';
+      } else {
+        modelFile = 'church_cross.glb';
       }
 
       viewer.setAttribute('src', baseURL + modelFile);
@@ -249,11 +237,27 @@
 
     function goBack() {
       const viewer = document.getElementById('modelViewer');
-
       viewer.pause();
       viewer.removeAttribute('src');
-
       goToScene('modelSelector');
+    }
+
+    function flipCamera() {
+      playSound();
+      const viewer = document.getElementById('modelViewer');
+      if (viewer.xrSession) {
+        viewer.xrSession.end();
+      }
+
+      navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "user" }
+      }).then(() => {
+        viewer.setAttribute('ar-camera', 'facingMode: user');
+        viewer.activateAR();
+      }).catch(err => {
+        alert("لا يمكن استخدام الكاميرا الأمامية على هذا الجهاز");
+        console.error(err);
+      });
     }
   </script>
 
