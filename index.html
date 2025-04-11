@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AR Viewer</title>
-  <script src="https://cdn.jsdelivr.net/npm/aframe@1.2.0/dist/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/aframe-ar.js@1.7.0/dist/aframe-ar.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.2.0/dist/model-viewer.min.js"></script>
   <style>
     body {
       margin: 0;
@@ -76,19 +75,6 @@
       background-color: transparent;
       color: black;
       cursor: pointer;
-      border: 2px solid white;
-      padding: 10px;
-      border-radius: 10px;
-      z-index: 10;
-    }
-
-    .flip-button {
-      position: absolute;
-      top: 120px;
-      right: 20px;
-      font-size: 20px;
-      background-color: transparent;
-      color: black;
       border: 2px solid white;
       padding: 10px;
       border-radius: 10px;
@@ -189,23 +175,21 @@
   <!-- AR Viewer Scene -->
   <div id="arScene" class="scene">
     <button class="back-button" onclick="goBack()">← Back</button>
-    <button class="flip-button" onclick="toggleCamera()">🔁 Flip Camera</button>
-    <a-scene embedded arjs>
-      <a-marker preset="hiro">
-        <a-entity 
-          id="tombModel" 
-          gltf-model="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/Tomb1.glb" 
-          scale="0.5 0.5 0.5" 
-          position="0 0 0">
-        </a-entity>
-      </a-marker>
-      <a-camera id="camera" rotation="0 0 0" />
-    </a-scene>
+    <model-viewer
+      id="modelViewer"
+      alt="3D Model"
+      ar
+      ar-modes="scene-viewer quick-look webxr"
+      ar-scale="auto"
+      camera-controls
+      auto-rotate
+      src=""
+      ar-camera="environment">
+    </model-viewer>
   </div>
 
   <script>
     let kidName = '';
-    let isFrontCamera = true;
 
     function startExperience() {
       kidName = document.getElementById('nameInput').value.trim();
@@ -229,17 +213,31 @@
     }
 
     function loadModel(modelName) {
-      goToScene('arScene');
-    }
+      const viewer = document.getElementById('modelViewer');
+      const baseURL = 'https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/';
+      let modelFile = '';
 
-    function toggleCamera() {
-      isFrontCamera = !isFrontCamera;
-      const camera = document.getElementById('camera');
-      camera.setAttribute('rotation', isFrontCamera ? '0 0 0' : '180 0 0');
-      alert(`Camera switched to ${isFrontCamera ? 'Front' : 'Back'}`);
+      switch (modelName) {
+        case 'tomb':
+          modelFile = 'Tomb1.glb';
+          break;
+        default:
+          modelFile = 'Tomb1.glb';
+      }
+
+      viewer.setAttribute('src', baseURL + modelFile);
+      goToScene('arScene');
+
+      // The AR camera should be automatically set once the model is loaded
+      setTimeout(() => {
+        viewer.activateAR();
+      }, 300);
     }
 
     function goBack() {
+      const viewer = document.getElementById('modelViewer');
+      viewer.pause();
+      viewer.removeAttribute('src');
       goToScene('modelSelector');
     }
   </script>
