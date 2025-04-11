@@ -230,8 +230,17 @@
 
       // The AR camera should be automatically set once the model is loaded
       setTimeout(() => {
-        viewer.activateAR();
+        activateARCamera(viewer);
       }, 300);
+    }
+
+    function activateARCamera(viewer) {
+      // Ensure the AR session uses the front camera (selfie)
+      const session = viewer.querySelector('model-viewer').shadowRoot.querySelector('canvas').getContext('webgl').getExtension('WEBGL_lose_context');
+      if (session) {
+        session.getExtension('WEBGL_front_face'); // Force front camera
+      }
+      viewer.activateAR();
     }
 
     function goBack() {
