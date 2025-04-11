@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AR Viewer</title>
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.2.0/dist/model-viewer.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe@1.2.0/dist/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-ar.js@1.7.0/dist/aframe-ar.js"></script>
   <style>
     body {
       margin: 0;
@@ -189,16 +190,17 @@
   <div id="arScene" class="scene">
     <button class="back-button" onclick="goBack()">← Back</button>
     <button class="flip-button" onclick="toggleCamera()">🔁 Flip Camera</button>
-    <model-viewer
-      id="modelViewer"
-      alt="3D Model"
-      ar
-      ar-modes="scene-viewer quick-look webxr"
-      ar-scale="auto"
-      ar-camera="user"
-      auto-rotate
-      camera-controls>
-    </model-viewer>
+    <a-scene embedded arjs>
+      <a-marker preset="hiro">
+        <a-entity 
+          id="tombModel" 
+          gltf-model="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/Tomb1.glb" 
+          scale="0.5 0.5 0.5" 
+          position="0 0 0">
+        </a-entity>
+      </a-marker>
+      <a-camera id="camera" rotation="0 0 0" />
+    </a-scene>
   </div>
 
   <script>
@@ -227,38 +229,17 @@
     }
 
     function loadModel(modelName) {
-      const viewer = document.getElementById('modelViewer');
-      const baseURL = 'https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/';
-      let modelFile = '';
-
-      switch (modelName) {
-        case 'tomb':
-          modelFile = 'Tomb1.glb';
-          break;
-        default:
-          modelFile = 'Tomb1.glb';
-      }
-
-      viewer.setAttribute('src', baseURL + modelFile);
-      viewer.setAttribute('ar-camera', isFrontCamera ? 'user' : 'environment');
       goToScene('arScene');
-
-      setTimeout(() => {
-        viewer.activateAR();
-      }, 300);
     }
 
     function toggleCamera() {
       isFrontCamera = !isFrontCamera;
-      const viewer = document.getElementById('modelViewer');
-      viewer.setAttribute('ar-camera', isFrontCamera ? 'user' : 'environment');
+      const camera = document.getElementById('camera');
+      camera.setAttribute('rotation', isFrontCamera ? '0 0 0' : '180 0 0');
       alert(`Camera switched to ${isFrontCamera ? 'Front' : 'Back'}`);
     }
 
     function goBack() {
-      const viewer = document.getElementById('modelViewer');
-      viewer.pause();
-      viewer.removeAttribute('src');
       goToScene('modelSelector');
     }
   </script>
