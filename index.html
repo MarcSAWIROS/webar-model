@@ -1,206 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AR Viewer</title>
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.2.0/dist/model-viewer.min.js"></script>
+  <meta charset="UTF-8">
+  <title>عيد القيامة</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <style>
     body {
       margin: 0;
-      font-family: 'Arial', sans-serif;
-      background-color: #000; /* Black background */
-      color: white;
-      text-align: center;
+      background-color: white;
+      font-family: sans-serif;
+      direction: rtl;
     }
-
     .scene {
       display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
       padding: 20px;
-      position: relative;
-    }
-
-    .scene.active {
-      display: flex;
-    }
-
-    /* Button Styling - Blue with White Text */
-    button {
-      padding: 20px 40px;
-      margin: 15px;
-      font-size: 22px;
-      border: none;
-      border-radius: 15px;
-      background-color: #007bff; /* Blue button */
-      color: white; /* White text */
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.3s ease-in-out, box-shadow 0.3s;
-      z-index: 10;
-      font-weight: bold;
-      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-      text-align: center; /* Center text inside the button */
-    }
-
-    button:hover {
-      background-color: #0056b3; /* Darker blue on hover */
-      transform: scale(1.1);
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
-    }
-
-    button:active {
-      transform: scale(0.95);
-    }
-
-    /* Input Field Styling */
-    input[type="text"] {
-      padding: 10px 20px;
-      font-size: 20px;
-      margin: 15px;
-      border-radius: 15px;
-      border: 2px solid #007bff;
-      background-color: #fff;
-      color: black;
       text-align: center;
-      width: 80%;
-      max-width: 350px;
     }
-
-    /* Back Button */
-    .back-button {
-      position: absolute;
-      top: 120px;  /* Moved the back button lower to avoid covering the logo */
-      left: 20px; /* Top-left corner */
-      font-size: 24px;
-      background-color: transparent;
-      color: white;
-      cursor: pointer;
-      border: 2px solid white;
-      padding: 10px;
-      border-radius: 10px;
-      z-index: 10;
+    .scene.active {
+      display: block;
     }
-
-    /* Logo */
-    .logo {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      max-width: 120px;
-      border-radius: 50%;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
-      z-index: 5;
-    }
-
-    /* Resurrection Image */
-    .resurrection-image {
-      max-width: 300px;
-      border-radius: 20px;
-      margin-top: 80px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
-      animation: glow 3s ease-in-out infinite;
-    }
-
-    @keyframes glow {
-      0%, 100% {
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
-      }
-      50% {
-        box-shadow: 0 0 40px rgba(255, 255, 255, 1);
-      }
-    }
-
-    h1, h2, h3 {
-      margin: 5px 0; /* Reduced margin between the Arabic phrases */
-    }
-
-    /* Fun Gift Box Styling - Blue with White Text */
-    .gift-box {
-      width: 120px;
-      height: 120px;
-      margin: 20px;
-      cursor: pointer;
-      transition: transform 0.5s ease, opacity 0.4s ease;
-      border-radius: 15px;
-      background-color: #007bff; /* Blue color for the gift box */
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white; /* Text color inside button */
+    input, button {
+      padding: 10px 20px;
       font-size: 18px;
-      font-weight: bold;
+      margin: 10px;
+      cursor: pointer;
     }
-
-    .gift-box:hover {
-      transform: scale(1.2) rotate(10deg);
-      box-shadow: 0 0 25px rgba(255, 255, 255, 1);
+    .gift {
+      width: 100px;
+      height: 100px;
+      margin: 20px;
+      display: inline-block;
+      background-image: url('https://cdn-icons-png.flaticon.com/512/1045/1045850.png');
+      background-size: cover;
+      transition: transform 0.6s;
     }
-
-    .gift-box:active {
-      transform: scale(1);
-      opacity: 0.7;
-    }
-
-    .gift-container {
-      display: flex;
-      gap: 30px;
-      flex-wrap: wrap;
-      justify-content: center;
+    .gift.opening {
+      transform: scale(1.2) rotate(20deg);
     }
   </style>
 </head>
 <body>
 
-  <!-- Logo -->
-  <img class="logo" src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/channels4_profile.jpg" alt="Logo" />
+  <audio id="buttonSound" src="https://cdn.jsdelivr.net/gh/Elk-zone/CDN@main/audio/button-click.mp3"></audio>
 
-  <!-- Welcome Scene -->
-  <div id="welcomeScene" class="scene active">
-    <img class="resurrection-image" src="https://raw.githubusercontent.com/MarcSAWIROS/webar-model/main/images.jpg" />
-    <h1>كنيسة الملاك ميخائيل</h1>
-    <h2>مدارس الأحد (إبتدائي)</h2>
-    <h1>عيد القيامة المجيد</h1>
-    <input type="text" id="nameInput" placeholder="إسمك إيه؟" />
-    <button onclick="startExperience()">Start</button>
+  <!-- Start Scene -->
+  <div class="scene active" id="startScene">
+    <h2>عيد قيامة مجيد</h2>
+    <input type="text" id="nameInput" placeholder="اكتب اسمك الأول" />
+    <button onclick="startExperience()">ابدأ</button>
   </div>
 
-  <!-- Model Selection Scene -->
-  <div id="modelSelector" class="scene">
-    <h2>المسيح قام يا <span id="kidName"></span></h2>
-    <div class="gift-container">
-      <div class="gift-box" onclick="openGift(this, 'church_cross')">صليب</div>
-      <div class="gift-box" onclick="openGift(this, 'tomb')">القبر</div>
-      <div class="gift-box" onclick="openGift(this, 'crown')">إكليل الشوك</div>
-    </div>
+  <!-- Model Selector Scene -->
+  <div class="scene" id="modelSelector">
+    <h2 id="kidName"></h2>
+    <p>إفتح الهدية وشوف المفاجأة</p>
+    <div class="gift" onclick="openGift(this, 'church_cross')"></div>
+    <div class="gift" onclick="openGift(this, 'tomb')"></div>
+    <div class="gift" onclick="openGift(this, 'crown')"></div>
+    <br />
+    <button onclick="goBack()">رجوع</button>
   </div>
 
-  <!-- AR Viewer Scene -->
-  <div id="arScene" class="scene">
-    <button class="back-button" onclick="goBack()">← Back</button>
-    <model-viewer
-      id="modelViewer"
-      alt="3D Model"
-      ar
-      ar-modes="scene-viewer quick-look webxr"
-      auto-rotate
-      camera-controls>
+  <!-- AR Scene -->
+  <div class="scene" id="arScene">
+    <model-viewer id="modelViewer" ar ar-modes="scene-viewer webxr quick-look" 
+      camera-controls auto-rotate style="width: 100%; height: 80vh;">
     </model-viewer>
+    <br />
+    <button onclick="goBack()">رجوع</button>
   </div>
 
   <script>
-    let kidName = '';
+    let kidName = "";
+    const buttonSound = document.getElementById("buttonSound");
+
+    function playSound() {
+      if (buttonSound) {
+        buttonSound.currentTime = 0;
+        buttonSound.play();
+      }
+    }
 
     function startExperience() {
+      playSound();
       kidName = document.getElementById('nameInput').value.trim();
       if (kidName) {
-        // Show the model selection scene and set the personalized message
-        document.getElementById('kidName').textContent = kidName;
+        document.getElementById('kidName').textContent = kidName + "!";
         goToScene('modelSelector');
       } else {
         alert("إكتب إسمك الأول");
@@ -208,16 +93,17 @@
     }
 
     function goToScene(sceneId) {
+      playSound();
       document.querySelectorAll('.scene').forEach(el => el.classList.remove('active'));
       document.getElementById(sceneId).classList.add('active');
     }
 
     function openGift(element, modelName) {
+      playSound();
       element.classList.add('opening');
-
       setTimeout(() => {
         loadModel(modelName);
-      }, 600); // Wait for box "open" animation
+      }, 600);
     }
 
     function loadModel(modelName) {
@@ -248,11 +134,10 @@
     }
 
     function goBack() {
+      playSound();
       const viewer = document.getElementById('modelViewer');
-
       viewer.pause();
       viewer.removeAttribute('src');
-
       goToScene('modelSelector');
     }
   </script>
